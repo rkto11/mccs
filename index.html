@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" type="image/png" href="./images/icon.png">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+	<script src="./js/jquery-3.6.1.min.js"></script>
+	<script src="./js/d3.min.js"></script>
+	<script src="./js/jquery.csv.js"></script>
+	<link href="./css/style.css" type="text/css" rel="stylesheet">
+	<title>Plans, Policy, and Analysis</title>
+</head>
+
+
+<body>
+	<nav id="mynav" class="navbar navbar-expand-md sticky-top">
+  		<div class="container-fluid">
+    			<a class="navbar-brand" style="color:#ffffff">PPBEA</a>
+    			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+      				<span class="navbar-toggler-icon"></span>
+    			</button>
+    			<div class="collapse navbar-collapse" id="mynavbar">
+      				<ul class="nav nav-pills me-auto" role="tablist">
+        				<li class="nav-item">
+          					<button class="nav-link active" data-bs-toggle="pill" data-bs-target="#home" type="button" role="tab" id="homebtn">Home</button>
+        				</li>
+        				<li class="nav-item"> 
+          					<button class="nav-link" data-bs-toggle="pill" data-bs-target="#facilities" type="button" role="tab" id="facbtn">Facilities</button>
+        				</li>
+        				<li class="nav-item">
+						<button class="nav-link" data-bs-toggle="pill" data-bs-target="#facrecap" type="button" role="tab" id="facrecapbtn">Facilities ReCap Plan</button>
+        				</li>
+					<li class="nav-item">
+						<button class="nav-link" data-bs-toggle="pill" data-bs-target="#lodging" type="button" role="tab" id="logbtn">Official Lodging</button>
+        				</li>
+					<li class="nav-item">
+						<button class="nav-link" data-bs-toggle="pill" data-bs-target="#catc" type="button" role="tab" id="catcbtn">Cat C</button>
+        				</li>
+					<li class="nav-item">
+						<button class="nav-link" data-bs-toggle="pill" data-bs-target="#dataentry" type="button" role="tab" id="databtn" disabled>Data Entry</button>
+						</li>
+     				 </ul>
+    			</div>
+  		</div>
+	</nav>
+
+
+
+
+
+
+    <div class="tab-content" id="contents">
+		<div id="home" class="tab-pane container p-5 active">
+				<div class="container-fluid  text-center">
+					<img src="./images/16_MCCSlogo_Comp.png" class="img-fluid" alt="MCCS Logo">
+					<h1>PPBEA Reform</h1>
+				</div>
+
+				<h2 id="introduction">INTRODUCTION</h2>
+				<p>Over the last two decades, our warfighters and their families have faced many challenges and made great sacrifices; yet they remain resilient and committed to supporting our Marine Corps. As the warfighters have remained faithful to the Corps, Marine Corps Community Services (MCCS) stayed faithful to them and the sacrifices they continue to make on a daily basis by supporting their success through a coordinated system of services across the MCCS portfolio. MCCS works diligently to enhance operational readiness, resilience, and total fitness for Marines and their families by routinely assessing needs and seeking innovative solutions to provide effective and relevant programs and services.</p>
+				<p>This strategic report is intended to inform and advance the Marine Corps Community Services (MCCS) Planning, Programming, Budget, Execution, and Audit/Assessment (PPBEA) reforms and fiscal guidance. Other tactical plans will be developed to operationalize and align MCCS planning endeavors.</p>
+				<h2 id="an-enduring-mccs-mission">AN ENDURING MCCS MISSION</h2>
+				<p>MCCS’ enduring mission is to take care of our Marines, Sailors, and their families in order to support the Marine Corps’ overall readiness and warfighting mission. MCCS provides a comprehensive and effective support system - from recruitment through separation or retirement, which supports readiness, preparedness, fitness, health, and overall quality of life. MCCS capabilities are delivered through three critical areas:</p>
+				<h3 id="marine-and-family-programs">Marine and Family Programs</h3>
+				<p>Marine and Family Programs provides a comprehensive and effective support system which improves readiness, preparedness, fitness, health, and overall quality of life, from recruitment through separation/retirement. Well-established programs, such as Community Counseling and Family Advocacy, and new initiatives such as implementation of a prevention strategy across the fleet, demonstrate MCCS’ commitment to families is strong and MCCS continues to provide support for the unique stresses and challenges USMC families face throughout a Marine’s career.</p>
+				<h3 id="semper-fit-and-recreation">Semper Fit and Recreation</h3>
+				<p>Semper Fit and Recreation capabilities provide commanders with a team of fitness experts, health educators, and sports and recreation professionals. The Semper Fit and Recreation Program improves military readiness and effectiveness through comprehensive human performance, fitness, sports, health education, and recreation programs designed to increase lethality and operational readiness. Semper Fit promotes a positive culture that deters negative behaviors, improves quality of life and serves as a critical arm in the prevention continuum. Semper Fit and Recreation focuses on the health protection and health sustainment of warfighters and their family members by supporting an individual’s proactive and actionable approach to improving and maintaining physical, emotional, and psychological resiliency.</p>
+				<h3 id="business-and-support-services">Business and Support Services</h3>
+				<p>The Business and Support Services of MCCS is about supporting Mission, Marines and their families by Investing in Marines for Duty Home and Self. The Marine Corps is most successful when Marines and families are equipped with services and tools they need to meet an era of persistent conflict, natural disasters, world pandemics, and the challenges of day-to-day life in the 21st century. A Marine’s ability to prevail over future challenges will depend on the strength of our force, the strength of our families,and our ability to navigate the ever-challenging environment that comes with a military lifestyle. There is an inherent understanding that our Business relevancy is aligned with mission and Marines. Our business portfolio is twofold; to develop solutions to meet the ever-changing needs of Marines while providing critical resources to support important MWR programs. The Business Portfolio includes activities that meet daily needs of Marines and families to include the Marine Corps Exchange, Marine Marts, Uniform Support, Food and PCS/TDY Lodging. Additionally, it includes an array of recreational activities that provide well-being, morale and a healthy lifestyle during dwell time.</p>
+				<p>The Business Portfolio also includes Support Services that provides Non-appropriated fund (NAF) Back office support across the total MCCS Enterprise, including Family Programs, Semper Fit and the Business Services. The consolidated back-office services include Information Technology, Human Resources, Finance and Accounting, Buying and Procurement, Training and Construction. Several innovative common support efficiency reforms are underway to include the stand-up of a Global Business Services center for NAF transactional accounting, and the standardization of common support across the MCCS enterprise as a precursor to developing a full cost of ownership model that is aligned to PPBEA reform. Business Strategies are focused on innovation and modernization efforts to maintain relevance with Marine and mission. The Marine Corps has been recognized for their forward leaning efforts to establish new service delivery models in order to disrupt old think and antiquated business behaviors.</p>
+				<hr />
+				<h2 id="overarching-goals">OVERARCHING GOALS</h2>
+				<h3 id="focus-on-the-individual-marine-and-their-family.">Focus on the individual Marine and their family.</h3>
+				<p>We will listen to the voice of Marines and their families through constant program evaluations and knee cap to knee cap conversations, and will adapt our programs and services to meet both their career and life events. We will stay attuned to environmental, market, and mission conditions that afford the best chance of remaining relevant and responsive to the demographics of our Corps.</p>
+				<h3 id="unity-of-efforts-and-purpose-across-mccs-in-the-execution-of-prevention-activities.">Unity of efforts and purpose across MCCS in the execution of prevention activities.</h3>
+				<p>Problematic behaviors continue to impact the Marine Corps and unit readiness. They impact our Marines and families and they can disrupt mission readiness and force lethality. MCCS must take additional steps to reduce problematic behaviors and promote positive behaviors and institutionalize conditions and attitudes that sustain progress and align prevention efforts across the Marine Corps.</p>
+				<h3 id="build-multi-capable-and-adaptable-programs-and-services.">Build multi-capable and adaptable programs and services.</h3>
+				<p>Our programs and services will be delivered through a synergistic and multi-capable model that is not impeded by boundaries and lack of collaboration. We will exploit the integrated characteristics of our organization, the skill set of our employees, and innovative approaches and technologies to deliver programs. We will develop and maintain a strategically relevant expeditionary and home-station capacity, with the freedom to maneuver, as required.</p>
+				<h3 id="posture-to-better-counter-threats-in-complex-business-operating-environments.">Posture to better counter “Threats” in complex business operating environments.</h3>
+				<p>We recognize that threats pose a significant impact and barrier to our ability to effectively serve Marines and their families. Once discovered, these barriers must be mitigated through continual process improvements and business re-engineering initiatives. As such, the organization will endeavor to meet established benchmarks, standards, and policies that are necessary to position the organization for success.</p>
+				<h3 id="invigorate-partnerships-and-internal-and-external-relationships.">Invigorate Partnerships and Internal and External Relationships.</h3>
+				<p>We will pursue internal and external strategic partnerships designed to enhance our current capabilities, and improve access and availability of programs and services both on and off the installation. We will also build strong relationships with other service providers and work in unison to address and meet divergent needs and to partner for prevention.</p>
+				<h3 id="expand-presence-and-communication.">Expand presence and communication.</h3>
+				<p>The image of Marine Corps Community Services must be understood throughout the Marine Corps. Marketing and communication plans, as well as official Marine Corps awareness programs, will be implemented to aggressively promote programs and services in order to ensure that our message is ubiquitous throughout the Corps. Messaging will be multifaceted to meet the multigenerational communication needs of Marines and their Families.</p>
+				<h3 id="become-a-critical-enabler-for-programs-and-services-to-support-marines-and-their-families.">Become a “Critical Enabler” for Programs and Services to support Marines and their Families.</h3>
+				<p>We will be built on management principles, plans and policies that provide the necessary tools to effectively and efficiently deliver programs and services. Integrated training, technical assistance and enhanced communications will be used to implement and exploit best practices and lessons-learned</p>
+				<hr />
+				<h2 id="supporting-capabilities">SUPPORTING CAPABILITIES</h2>
+				<h3 id="community-based-perspectives.">Community Based Perspectives.</h3>
+				<p>Marines and their families are the centerpiece of the Corps and our MCCS programs. This is a team effort and dependent on quality, integrated relationships across all levels of command. Our support to Marines and families must be responsive and adaptive to the Fleet Marine Force and all commanders and organizations who are engaged in the development, education, health, and welfare of Marines and families.</p>
+				<h3 id="building-program-excellence-and-an-innovation-culture.">Building Program Excellence and an Innovation Culture.</h3>
+				<p>Our MCCS programs must address the unique challenges of the Marine Corps lifestyle. We expect excellence and nothing less. We continuously assess our programs so they provide a continuum of care throughout the Marines and families military lifecycle, addressing the balance of mission, life, and career events. We rapid prototype new business ventures and pilot test new services that are informed by in-depth research and leverage partnerships, sponsorships and technology to remain relevant in our mission contributions.</p>
+				<h3 id="honing-the-warfighting-mindset.">Honing the Warfighting Mindset.</h3>
+				<p>We develop programming and provide opportunities for Marine and families to develop readiness and resiliency skill sets. Enhancing their social relationships and support structures strengthen independence to navigate the military lifestyle when duty calls. Mind, body, spirit, and social are critical components of overall well-being and readiness.</p>
+				<h3 id="funding-for-success">Funding for Success</h3>
+				<p>We will be fiscally responsible and invest in readiness. We validate requirements and needs through a data driven approach. We plan, program, budget and execute resources to sustain valued programs and services and a well maintained infrastructure. MCCS BOD strategy and funding decisions are informed by strategic plans and a prioritization and risk management framework within the overarching MCCS PPBEA reform. We make hard decisions to prioritize resources to address the most important and relevant requirements. Likewise, we leverage the MCCS BOD and senior leaders to identify areas of divestiture.</p>
+				<p>Reference: MCCS Integrated Strategic Guidance <a href="https://mccsorg-my.sharepoint.com/:b:/g/personal/jason_barnes_usmc-mccs_org/ESIbRg1PR9tMu8YLVtzJKkABncamySFqIZnTYB7Zv3bxQQ?e=ptuZJb">link</a></p>
+		</div>
+
+
+
+
+
+
+		<div id="facilities" class="tab-pane container fade">
+			<div class="container text-center">
+					<h1 class="title toc-ignore">MCCS Facilities Exploratory Analysis</h1>
+			</div>
+			
+			<div class="result container-sm">
+				<table id="theResult"></table>
+			</div>
+
+
+			<div>
+				<script>
+					$(document).ready(function () {
+						$.get('https://mccsusmc.sharepoint.us/:x:/t/MRSecretariat_PPA/EYZn4xgajqdJvxepv4OG3qQBJQH0t-bMYS5Vkr2EJfxq5Q?e=6ATsZn', function (theData) {
+							var data = $.csv.toObjects(theData);
+							
+							console.log(data);
+						});
+					});
+
+				</script>
+<!--https://raw.githubusercontent.com/codeforamerica/ohana-api/master/data/sample-csv/contacts.csv --> 
+				<script>
+					$(document).ready(function () {
+						$.get('https://raw.githubusercontent.com/codeforamerica/ohana-api/master/data/sample-csv/contacts.csv', function (theData) {
+							var data = $.csv.toObjects(theData);
+							var theHtml = createTable(data);
+							$('#theResult').html(theHtml);
+						});
+					});
+
+					function createTable(data) {
+						var html = '';
+
+						if (data[0].constructor === Object) {
+							html += '<tr>\r\n';
+							for (var item in data[0]) {
+								html += '<th>' + item + '</th>\r\n';
+							}
+							html += '</tr>\r\n';
+
+							for (var row in data) {
+								html += '<tr>\r\n';
+								for (var item in data[row]) {
+									html += '<td>' + data[row][item] + '</td>\r\n';
+								}
+								html += '</tr>\r\n';
+							}
+						}
+						return html;
+					}
+				</script>
+			</div>
+		</div>
+
+
+
+
+
+		<div id="facrecap" class="tab-pane container fade">
+
+		</div>
+		<div id="lodging" class="tab-pane container fade">
+
+		</div>
+		<div id="catc" class="tab-pane container fade">
+		
+		</div>
+		<div id="dataentry" class="tab-pane container fade">
+			<form id="myForm">
+				<input type="file" id="csvFile" accept=".csv" />
+				<br />
+				<input type="submit" value="Submit" />
+			  </form>
+			  <script>
+				const myForm = document.getElementById("myForm");
+				const csvFile = document.getElementById("csvFile");
+			
+				function csvToArray(str, delimiter = ",") {
+			
+				  // slice from start of text to the first \n index
+				  // use split to create an array from string by delimiter
+				  const headers = str.slice(0, str.indexOf("\n")).split(delimiter);
+			
+				  // slice from \n index + 1 to the end of the text
+				  // use split to create an array of each csv value row
+				  const rows = str.slice(str.indexOf("\n") + 1).split("\n");
+			
+				  // Map the rows
+				  // split values from each row into an array
+				  // use headers.reduce to create an object
+				  // object properties derived from headers:values
+				  // the object passed as an element of the array
+				  const arr = rows.map(function (row) {
+					const values = row.split(delimiter);
+					const el = headers.reduce(function (object, header, index) {
+					  object[header] = values[index];
+					  return object;
+					}, {});
+					return el;
+				  });
+			
+				  // return the array
+				  return arr;
+				}
+			
+				myForm.addEventListener("submit", function (e) {
+				  e.preventDefault();
+				  const input = csvFile.files[0];
+				  const reader = new FileReader();
+			
+				  reader.onload = function (e) {
+					const text = e.target.result;
+					const data = csvToArray(text);
+					document.write(JSON.stringify(data));
+				  };
+				  
+				  reader.readAsText(input);
+				});
+			  </script>
+		</div>
+	</div>
+</body>
+</html>

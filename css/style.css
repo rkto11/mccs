@@ -1,0 +1,23 @@
+body{
+	background-color: #33333d;
+}
+
+#mynav{
+	background-color: #27272f;
+}
+
+#homebtn, #facbtn, #facrecapbtn, #logbtn, #catcbtn, #databtn{
+	background-color: #27272f;
+	color: #82838b;
+	padding:0,0,20px,20px;
+	transition: all 0.5s;
+}
+
+#homebtn.active, #facbtn.active, #facrecapbtn.active, #logbtn.active, #catcbtn.active, #databtn.active{
+	background-color: #27272f;
+	color: #ffffff;
+}
+
+#contents{
+	color:#f9f9f9;
+}
