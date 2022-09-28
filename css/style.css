@@ -1,13 +1,24 @@
 body{
 	background-color: #33333d;
+	
+}
+
+h1 {
+	text-align: center;
+}
+
+p{
+	font-size: 10pt;
 }
 
 #mynav{
 	background-color: #27272f;
+	font-size: 10pt;
 }
 
 #homebtn, #facbtn, #facrecapbtn, #logbtn, #catcbtn, #databtn{
 	background-color: #27272f;
+	border-width: 1px;
 	color: #82838b;
 	padding:0,0,20px,20px;
 	transition: all 0.5s;
@@ -16,8 +27,49 @@ body{
 #homebtn.active, #facbtn.active, #facrecapbtn.active, #logbtn.active, #catcbtn.active, #databtn.active{
 	background-color: #27272f;
 	color: #ffffff;
+	border-color: #f9f9f9;
+	border-width: 2px;
 }
 
 #contents{
 	color:#f9f9f9;
+}
+
+#home{ width: 100%;
+}
+
+/* Facilities Tab Content */
+
+#facnav{
+	box-sizing: content-box;
+}
+
+#FacContents{
+	text-align: center;
+	box-sizing: content-box;
+	max-width: 75%;
+	margin-left: 16%;
+	margin-right: auto;
+}
+
+
+table, th, td {
+	color:#f9f9f9;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: left;
+}
+
+.pagination>li>a {
+	background-color: #33333d;
+	color: #82838b;
+}
+.pagination>li>a.active {
+	background-color:#33333d;
+	color:#f9f9f9;
+	
+}
+
+.pagination>li>a.disabled {
+	background-color:#33333d;
 }
