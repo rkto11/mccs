@@ -8,11 +8,18 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
 	<script src="./js/jquery-3.6.1.min.js"></script>
+	<script src="./js/jquery-ui.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="./css/jquery-ui.structure.min.css">
+	<link rel="stylesheet" type="text/css" href="./css/datatables.min.css"/>
+	<link href="./css/style.css" type="text/css" rel="stylesheet">
+	<script src="./js/jquery.tocify.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="./css/jquery.tocify.css">
 	<script src="./js/d3.min.js"></script>
 	<script src="./js/jquery.csv.js"></script>
-	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.12.1/datatables.min.css"/>
-	<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.12.1/datatables.min.js"></script>
-	<link href="./css/style.css" type="text/css" rel="stylesheet">
+	<script src="./js/datatables.min.js"></script>
+	<script src="./js/createtables.js"></script>
+	<script src="./js/creategraphs.js"></script>
+
 	<title>Plans, Policy, and Analysis</title>
 </head>
 
@@ -20,29 +27,29 @@
 <body>
 	<nav id="mynav" class="navbar navbar-expand-md sticky-top">
   		<div class="container-fluid">
-    			<a class="navbar-brand" style="color:#ffffff">PPBEA</a>
+    			<a class="navbar-brand toc-ignore" style="color:#ffffff">PPBEA</a>
     			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
       				<span class="navbar-toggler-icon"></span>
     			</button>
     			<div class="collapse navbar-collapse" id="mynavbar">
       				<ul class="nav nav-pills me-auto" role="tablist">
         				<li class="nav-item">
-          					<button class="nav-link active" data-bs-toggle="pill" data-bs-target="#home" type="button" role="tab" id="homebtn">Home</button>
+          					<button class="nav-link active" data-bs-toggle="pill" data-bs-target="#home" type="button" role="tab" id="homebtn" onclick="topFunction()">Home</button>
         				</li>
         				<li class="nav-item"> 
-          					<button class="nav-link" data-bs-toggle="pill" data-bs-target="#facilities" type="button" role="tab" id="facbtn">Facilities</button>
+          					<button class="nav-link" data-bs-toggle="pill" data-bs-target="#facilities" type="button" role="tab" id="facbtn" onclick="topFunction()">Facilities</button>
         				</li>
         				<li class="nav-item">
-						<button class="nav-link" data-bs-toggle="pill" data-bs-target="#facrecap" type="button" role="tab" id="facrecapbtn">Facilities ReCap Plan</button>
+						<button class="nav-link" data-bs-toggle="pill" data-bs-target="#facrecap" type="button" role="tab" id="facrecapbtn" onclick="topFunction()">Facilities ReCap Plan</button>
         				</li>
 					<li class="nav-item">
-						<button class="nav-link" data-bs-toggle="pill" data-bs-target="#lodging" type="button" role="tab" id="logbtn">Official Lodging</button>
+						<button class="nav-link" data-bs-toggle="pill" data-bs-target="#lodging" type="button" role="tab" id="logbtn" onclick="topFunction()">Official Lodging</button>
         				</li>
 					<li class="nav-item">
-						<button class="nav-link" data-bs-toggle="pill" data-bs-target="#catc" type="button" role="tab" id="catcbtn">Cat C</button>
+						<button class="nav-link" data-bs-toggle="pill" data-bs-target="#catc" type="button" role="tab" id="catcbtn">Cat C</button onclick="topFunction()">
         				</li>
 					<li class="nav-item">
-						<button class="nav-link" data-bs-toggle="pill" data-bs-target="#dataentry" type="button" role="tab" id="databtn" disabled>Data Entry</button>
+						<button class="nav-link" data-bs-toggle="pill" data-bs-target="#dataentry" type="button" role="tab" id="databtn" onclick="topFunction()">Data Entry</button>
 						</li>
      				 </ul>
     			</div>
@@ -52,9 +59,10 @@
 
 
     <div class="tab-content" id="contents">
-		<div id="home" class="tab-pane container p-5 active">
-				<div class="container-fluid  text-center">
-					<img src="./images/16_MCCSlogo_Comp.png" class="img-fluid" alt="MCCS Logo">
+
+		<div id="home" class="tab-pane container fade active show">
+				<div class="container-fluid text-center">
+					<img src="./images/16_MCCSlogo_Comp.png" class="img-fluid" alt="MCCS Logo" style="max-height: 300px;">
 					<h1>PPBEA Reform</h1>
 				</div>
 
@@ -100,200 +108,48 @@
 		</div>
 
 
-		<div id="facilities" class="tab-pane container fade">
-			<div class="container text-center">
-					<h1 class="title toc-ignore">MCCS Facilities Exploratory Analysis</h1>
-					<p>Note: The current report is based on utilization information unless otherwise noted.</p>
-					<p>Facility Sustainment, Restortation, and Modernization (FSRM) calculations are resource agnostic.</p>
-					<p>Data dictionary and assumptions are at the end of this report.</p>
-					<p>Raw  data pulled from GoRPM on <i>make this autofilled date from file</i>.</p>
-					<p>Download raw data here: "link here"</p>
-					<p>Download cleaned data here: "link here"</p>
-					<h2>Exploring Costs</h2>
-					<br>
-					<h3>Cost by Category</h3>
-					<p> Facility Sustainment, Resportation, and Modernization (FSRM) </p>
-					<br>
-			</div>
+		<div id="facilities" class="tab-pane container-fluid fade">
+			<aside>
+				<div id="facnav"></div>
+			</aside>
+			<div id="FacContents">
+				<div class="container">
+						<h1>MCCS Facilities Exploratory Analysis</h1>
+						<p>Note: The current report is based on utilization information unless otherwise noted.</p>
+						<p>Facility Sustainment, Restortation, and Modernization (FSRM) calculations are resource agnostic.</p>
+						<p>Data dictionary and assumptions are at the end of this report.</p>
+						<p>Raw  data pulled from GoRPM on <i>make this autofilled date from file</i>.</p>
+						<p>Download raw data here: "link here"</p>
+						<p>Download cleaned data here: "link here"</p>
+						<h2>Exploring Costs</h2>
+						<br>
+						<h3>Cost by Category</h3>
+						<p> Facility Sustainment, Resportation, and Modernization (FSRM) </p>
+						<br>
+				</div>
 
-			<div class="container">
-				<h4 class  = "text-center">FY24 MCCS FSRM Cost by Category</h4>
-				<div class="table-responsive">
-					<table class="display" id="tabCat" width="75%"></table>
+				<div class="container" id="FacCharts">
+					<!--see createtables.js for table generation-->
+					<h4>FY24 MCCS FSRM Cost by Category</h4>
+						<table class="table display dt-responsive" id="tabCat" style="width:100%"></table>
+
+					<h4>FY24 MCCS FSRM Cost by Region</h4>
+						<table class="table display dt-responsive" id="tabRegion" style="width:100%"></table>
+
+					<h4>FY24 MCCS FSRM Cost by Region Cat C</h4>
+						<table class="table display dt-responsive" id="tabRegionC" style="width:100%"></table>
+
+					<h4>FY24 MCCS FSRM Cost by Program</h4>
+						<table class="table display dt-responsive" id="tabProgram" style="width:100%"></table>
+
+					<h4>FY24 MCCS FSRM Cost by Use Category</h4>
+						<table class="table display dt-responsive" id="tabCCN" style="width:100%"></table>
+				</div>
+
+				<div class="container" id="FacGraphs">
+					<div id="firstvisual"></div>
 				</div>
 			</div>
-
-			<div class="container">
-				<h4 class  = "text-center">FY24 MCCS FSRM Cost by Region</h4>
-				<div class="table-responsive">
-					<table class="display" id="tabRegion" width="75%"></table>
-				</div>
-			</div>
-
-			<div class="container">
-				<h4 class  = "text-center">FY24 MCCS FSRM Cost by Program</h4>
-				<div class="table-responsive">
-					<table class="display" id="tabProgram" width="75%"></table>
-				</div>
-			</div>
-
-			<div class="container">
-				<h4 class  = "text-center">FY24 MCCS FSRM Cost by Use Category</h4>
-				<div class="table-responsive">
-					<table class="display" id="tabCCN" width="75%"></table>
-				</div>
-			</div>
-		
-			<script>
-				$(document).ready(function () {
-					$.get('https://raw.githubusercontent.com/rkto11/mccs/main/data/df_final.csv', function (theData) {
-						var data = $.csv.toObjects(theData);
-						createGroupTables(data);						
-					});
-				});
-
-				function createGroupTables(input){
-					var data = input;
-					var Category = ['Category', 'naf_cat'];
-					var Region = ['Region', 'region'];
-					var Program = ['Program', 'op_activity'];
-					var CCNDesc = ['Use Category', 'use_desc'];
-
-					Category.push([...new Set(data.map(item => item.naf_cat))]);
-					Region.push([...new Set(data.map(item => item.region))]);
-					Program.push([...new Set(data.map(item => item.op_activity))]);
-					CCNDesc.push([...new Set(data.map(item => item.use_desc))]);
-					
-					var CategoryData = createFSRM(data, Category);
-					var RegionData =  createFSRM(data, Region);
-					var ProgramData = createFSRM(data, Program);
-					var CCNDescData = createFSRM(data, CCNDesc);
-
-					var CategoryTable = createTable(CategoryData);
-					var RegionTable = createTable(RegionData);
-					var ProgramTable = createTable(ProgramData);
-					var CCNDescTable = createTable(CCNDescData);
-
-					$('#tabCat').html(CategoryTable);
-					$(document).ready(function () {
-						$('#tabCat').dataTable({
-							data: CategoryData,
-							paging: false,
-							"bFilter": false,
-							columns: [
-								{data: 'Category'},
-								{data: 'Sustainment',render: $.fn.dataTable.render.number(',', '.', 0, '$' )},
-								{data: 'RM',render: $.fn.dataTable.render.number(',', '.', 0, '$' )},
-								{data: 'Total',render: $.fn.dataTable.render.number(',', '.', 0, '$' )},
-							],
-						});
-					});
-
-					$('#tabRegion').html(RegionTable);
-					$(document).ready(function () {
-						$('#tabRegion').dataTable({
-							data: RegionData,
-							paging: false,
-							"bFilter": false,
-							order: [[3, 'desc']],
-							columns: [
-								{data: 'Region'},
-								{data: 'Sustainment',render: $.fn.dataTable.render.number(',', '.', 0, '$' )},
-								{data: 'RM',render: $.fn.dataTable.render.number(',', '.', 0, '$' )},
-								{data: 'Total',render: $.fn.dataTable.render.number(',', '.', 0, '$' )},
-							],
-						});
-					});
-
-					$('#tabProgram').html(ProgramTable);
-					$(document).ready(function () {
-						$('#tabProgram').dataTable({
-							data: ProgramData,
-							paging: false,
-							"bFilter": false,
-							order: [[3, 'desc']],
-							columns: [
-								{data: 'Program'},
-								{data: 'Sustainment',render: $.fn.dataTable.render.number(',', '.', 0, '$' )},
-								{data: 'RM',render: $.fn.dataTable.render.number(',', '.', 0, '$' )},
-								{data: 'Total',render: $.fn.dataTable.render.number(',', '.', 0, '$' )},
-							],
-						});
-					});
-
-					$('#tabCCN').html(CCNDescTable);
-					$(document).ready(function () {
-						$('#tabCCN').dataTable({
-							data: CCNDescData,
-							paging: true,
-							"bFilter": false,
-							order: [[3, 'desc']],
-							columns: [
-								{data: 'Use Category'},
-								{data: 'Sustainment',render: $.fn.dataTable.render.number(',', '.', 0, '$' )},
-								{data: 'RM',render: $.fn.dataTable.render.number(',', '.', 0, '$' )},
-								{data: 'Total',render: $.fn.dataTable.render.number(',', '.', 0, '$' )},
-							],
-						});
-					});
-				}
-
-				function createFSRM(input, groupdata){	
-					var data = input;
-					var HN = groupdata[0];
-					var k = groupdata[1];
-					var arr = groupdata[2];
-					function calcTotals (dataset, headerName, key, value){ //e.g. data, "Category", "naf_cat", {"A", "B", "C"}
-						var result = [];
-						for (var  j =0; j<value.length; j++){
-							var SusTotal = 0;
-							var RMTotal = 0;
-							var TotalCost = 0;
-							
-							for (var i=0; i < dataset.length ; i++){
-								if(dataset[i][key]=== value[j]){
-									SusTotal += parseFloat(dataset[i].sus);
-									RMTotal += parseFloat(dataset[i].RM_corrected);
-								}
-							}
-
-							var Sus = Math.round(SusTotal);
-							var RMT = Math.round(RMTotal);
-							TotalCost = Sus + RMT;
-
-							result.push({[headerName]: value[j], Sustainment: Sus, RM: RMT, Total: TotalCost});
-						}
-						return result;
-					}
-					var Output = calcTotals(data,HN,k,arr);
-					
-					return Output;
-				}
-				
-
-				function createTable(data) {
-					var html = '';
-
-					if (data[0].constructor === Object) {
-						html += '<tr>\r\n';
-						for (var item in data[0]) {
-							html += '<th>' + item + '</th>\r\n';	
-						}
-//							html += '</tr>\r\n';
-//							for (var row in data) {
-//								html += '<tr>\r\n';
-//								for (var item in data[row]) {
-//								
-//									html += '<td>' + data[row][item] + '</td>\r\n';
-//								}
-//								html += '</tr>\r\n';
-//							}
-					}
-					return html;
-				}
-
-				
-			</script>
 		</div>
 
 
@@ -357,8 +213,63 @@
 				  
 				  reader.readAsText(input);
 				});
+
+				/*$(function() {
+					var toc = $("#facnav").tocify().data("FacContents");
+					toc.setOption({showEffect: "fadeIn", selectors: "h2,h3,h4"});
+				});
+
+				($(document).ready(function ()  {
+
+				// temporarily add toc-ignore selector to headers for the consistency with Pandoc
+					$('.unlisted.unnumbered').addClass('toc-ignore')
+	
+					// move toc-ignore selectors from section div to header
+					$('div.section.toc-ignore')
+						.removeClass('toc-ignore')
+						.children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+					// establish options
+					var options = {
+					selectors: "h1,h2",
+					theme: "bootstrap3",
+					context: '.toc-content',
+					hashGenerator: function (text) {
+						return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+					},
+					ignoreSelector: ".toc-ignore",
+					scrollTo: 0
+					};
+					options.showAndHide = true;
+					options.smoothScroll = true;
+
+					// tocify
+					var toc = $("#TOC").tocify(options).data("toc-tocify");
+					});
+
+					*/
+				
 			  </script>
 		</div>
 	</div>
+	<script>
+		//see createtables.js
+		$(document).ready(function () {
+			$.get('https://raw.githubusercontent.com/rkto11/mccs/main/data/df_final.csv', function (theData) {
+				var data = $.csv.toObjects(theData);
+				createGroupTables(data);
+			});
+		});
+
+		graph1();						
+		
+
+		function topFunction() {
+ 			document.body.scrollTop = 0;
+  			document.documentElement.scrollTop = 0;
+		}
+
+		
+	</script>
 </body>
 </html>
