@@ -334,16 +334,6 @@
 			});
 		});
 		
-		const fs = require('fs');
-		const papa = require('papaparse');
-		const file = fs.createReadStream('https://raw.githubusercontent.com/rkto11/mccs/main/data/df_final.csv');
-		console.log(papa.parse(file,{
-			worker: true,
-			step: function(result) {},
-		 complete: function(results, file){console.log('done')}
-		}
-	
-));
 
 		function topFunction() {
  			document.body.scrollTop = 0;
