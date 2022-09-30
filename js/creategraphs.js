@@ -67,6 +67,7 @@ height = 300 - margin.top - margin.bottom;
 ////////////////////////
 //line graph
 ////////////////////////
+
 const svg = d3.select("div#firstvisual")
         .classed("svg-ccontainer",true)
         .append("svg")
@@ -74,7 +75,6 @@ const svg = d3.select("div#firstvisual")
         .attr("viewBox","0 0 800 300")
         .append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
-
 d3.csv("https://raw.githubusercontent.com/rkto11/mccs/main/data/df_final.csv",
 function(d){
         return {dx: d3.timeParse("%Y-%m-%d")(formatDate(d.build_dt)), inst: d.installation, reg: d.region, category: d.naf_cat, value : d.total_measure }
