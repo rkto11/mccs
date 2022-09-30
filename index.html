@@ -18,7 +18,6 @@
 	<script src="./js/jquery.csv.js"></script>
 	<script src="./js/datatables.min.js"></script>
 	<script src="./js/createtables.js"></script>
-	<script src="./js/creategraphs.js"></script>
 
 	<title>Plans, Policy, and Analysis</title>
 </head>
@@ -147,8 +146,82 @@
 				</div>
 
 				<div class="container" id="FacGraphs">
-					<div id="firstvisual"></div>
+					<div id="g1">
+						<div id="firstvisual"></div>
+						<p>some text here</p>
+					</div>
+					<br />
+					<div id="g2">
+						<button onclick="updatebar('catdata')">Category</button>
+						<button onclick="updatebar('regdata')">Region</button>
+						<button onclick="updatebar('instdata')">Installation</button>
+						<div id="barchart"></div>
+						<p>more text here</p>
+					</div>
+					<script src="./js/creategraphs.js"></script>
 				</div>
+			
+
+			<div id="data-dictionary" class="section level1" style="text-align: left">
+				<h1 class="text-center">Data Dictionary</h1>
+				<p><strong>Region:</strong> Installations grouped within their perspective geographical region. There is a total of 5 regions (MCIWEST, MCIEAST, MCIPAC, MCINCR, SLTI) The following locations are not associated with a region in the data set:</p>
+				<ol style="list-style-type: decimal">
+				<li><p>Garden City</p></li>
+				<li><p>Camp Elmore</p></li>
+				<li><p>Kansas City</p></li>
+				<li><p>MARFORRES</p></li>
+				<li><p>4th MARDIV</p></li>
+				</ol>
+				<p><strong>Installation:</strong> The name of the installation MCCS services are provided. Installation is derived from the MCCS Installation Name column in iNFADS.</p>
+				<p><strong>RPUID:</strong> The real property unique identifier (RPUID) is a non-intelligent code used to permanently and uniquely identify a real property asset. (Primary Key to connect facilities with utilization).</p>
+				<hr />
+				<p><strong>NAF Category, Program</strong> are mapped to iNFADS use_codes based on the the following:</p>
+				<p><a href="https://mccsorg-my.sharepoint.com/:x:/g/personal/jason_barnes_usmc-mccs_org/EY2pByxnvI5AkBjH0x53k4EB5TkkKThKs7aqM1JOGzB_9w?e=UgoQrB">MCCS Category Codes Worksheet</a></p>
+				<p><strong>use_code:</strong> A five-digit system of numbering a common nomenclature for classes 1 and 2 plant property. See NAVFAC P-72, Department of the Navy Facility Category Codes, for a listing of recognized codes.</p>
+				<p><strong>use_desc:</strong> The title of the use category associated with the Category Use Code (use_code) derived from the Appendix A - Category Codes for Navy and Marine Corps Real Property Replacement for NAVFAC P72.</p>
+				<p><strong>fac_use:</strong> Identifies the use of a Navy or Marine Corps facility (or portion thereof).</p>
+				<p><strong>PRV:</strong> PRV is the cost to replace an existing facility with a generic facility that can perform the same function(s). The notional replacement facility is generally understood to be the same size and to occupy the same site as the existing facility. The notional replacement facility is also assumed to be constructed to current standards of materials and design. Since each facility has its own theoretical PRV, no facility PRV should contain costs associated with any other facility. Therefore, PRV costs are considered to extend only to the five-foot line surrounding the facility. This estimate applies to all facilities regardless of funding source and does not include land or leasing costs. The PRV is calculated at the Use level and is based on the standard DoD algorithm:</p>
+				<blockquote>
+				<p>Plant Replacement Value = Facility Quantity<sup>1</sup>x Construction Cost Factor<sup>2</sup>x Area Cost Factor<sup>3</sup>x Historical Records Adjustment<sup>4</sup>x Planning and Design Factor<sup>5</sup>x Supervision Inspection and Overhead Factor<sup>6</sup>x Contingency Factor<sup>7</sup></p>
+				</blockquote>
+				<p><sup>1</sup> The Facility Quantity is the sum total of assets at the Use/User level.</p>
+				<p><sup>2</sup> The Construction Cost Factor is the cost value for a specific DoD Facility Analysis Code (FAC) and is “unit of measure” specific. This value is stored in the Category Code Module and updated upon the annual release of the latest version of the DoD Facilities Pricing Guide from a spreadsheet provided by NAVFAC HQ.</p>
+				<p><sup>3</sup> The Geographical Area Cost Factor is a value carried on the city table. This value is stored in the RPI and updated at year-end from a spreadsheet provided by NAVFAC HQ.</p>
+				<p><sup>4</sup> The Historic Records Adjustment Factor is an adjustment to account for increased costs for replacement of historical facilities or for construction in a historic district. The current factor is 1.05 and is based on the Historic/Heritage Asset data elements in iNFADS (DE 410a-d).</p>
+				<p><sup>5</sup> The Planning and Design Factor accounts for the planning and design of a facility. The current value of this factor is 1.09 for all but medical facilities and 1.13 for medical facilities. Assignment of this factor is based on the Category Code Number of the Use/User record.</p>
+				<p><sup>6</sup> The Supervision, Inspection and Overhead Factor accounts for the supervision, inspection, and overhead activities associated with the management of a construction project. The current value of the factor is 1.06 for facilities in the continental US (CONUS) and 1.065 for facilities outside of the continental US (OCONUS). Assignment of this factor is based on the Country Code and State Code.</p>
+				<p><sup>7</sup> The Contingency Factor accounts for construction contingencies; the current value of the factor is 1.05. PRV appears in the NAVFAC Public Works (Assessment) drills, Facility Maintenance Responsibility Report and various budget exhibits.</p>
+				<p><strong>Sustainment:</strong> Sustainment provides resources for maintenance and repair activities necessary to keep an inventory of facilities in good working order over a 50-year service life. It includes regularly scheduled adjustments and inspections, preventive maintenance tasks, and emergency response and service calls for minor repairs. It also includes major repairs or replacement of facility components that are expected to occur periodically throughout the facility life-cycle.</p>
+				<p>GENERAL POLICY FOR SUSTAINMENT</p>
+				<ol style="list-style-type: decimal">
+				<li><p>The work includes regular roof replacement, refinishing wall surfaces, repairing and replacing heating, ventilation and air conditioning (HVAC) systems, replacing tile and carpeting, and similar type work. When sustainment involves replacement of constituent parts, the items installed shall serve the same purpose.</p></li>
+				<li><p>Sustainment does not include any construction. Sustainment does not include repairing or replacing non-attached equipment or furniture, or building components that typically last more than 50 years (e.g., foundation and structural members). Sustainment does not include repair work classified as restoration or modernization, environmental compliance, or historical preservation. Other tasks associated with facilities operations (such as custodial services, grass cutting, landscaping, waste disposal, and the provision of central utilities) are also not included.</p></li>
+				<li><p>Replacing landscaping destroyed by a sustainment project shall be classified as sustainment.</p></li>
+				</ol>
+				<blockquote>
+				<p><em>Sustainment</em>: The calculation in this report for Cat C utilizations is 2x iNFADS FSM calculated Sustainment costs; <br> Cat A, Cat B and Lodging utilizations (FSM calculated sustainment costs)</p>
+				</blockquote>
+				<p><strong>Restoration and Modernization:</strong> Restoration and Modernization provides resources for improving facilities. Restoration includes repair and replacement work to restore facilities damaged by inadequate sustainment, excessive age, natural disasters, fire, accident, or other cases. Modernization includes construction or alteration of facilities solely to implement a new or higher standard (including regulatory changes), to accommodate new functions, or replace building components that typically last more than 50 years (e.g., foundations and structural members).</p>
+				<p>GENERAL POLICY FOR RESTORATION AND MODERNIZATION</p>
+				<ol style="list-style-type: decimal">
+				<li><p>Restoration and modernization does not include recurring sustainment tasks or certain environmental measures that are funded elsewhere.</p></li>
+				<li><p>Other tasks associated with facilities operations (such as custodial services, grass cutting, landscaping, waste disposal, and the provision of central utilities) are also not included.</p></li>
+				</ol>
+				<blockquote>
+				<p><em>R &amp; M</em>: The calculation in this report is based on 2.5% of the facilities Plant Replacement Value (PRV), this calculation assumes facility is fully recapitalized and that sustainment costs are being applied annually to each facility.</p>
+				</blockquote>
+				<p><strong>Adequate Area Measure (adq):</strong> The capacity or size in area measure of a facility or portion thereof that is in adequate condition and associated with a designated function (use) and a designated user. Adequate is defined as being capable of supporting the designated function without a need for capital improvements.</p>
+				<p><strong>Adequate Other Measure (abq Other):</strong> The capacity or size in other measure of a facility or portion thereof that is in adequate condition and associated with a designated function (use) and a designated user. Adequate is defined as being capable of supporting the designated function without a need for capital improvements.</p>
+				<p><strong>Adequate Alternate Measure (adq Alt):</strong> The capacity or size in alternate measure of a facility or portion thereof that is associated with a designated function (use) and designated user. Adequate is defined as being capable of supporting the designated function without a need for capital improvements.</p>
+				<p><strong>Substandard Area Measure (sub)</strong> The capacity or size in the area measure of a facility or portion thereof that is in substandard condition and associated with a designated function (use) and a designated user. Substandard is defined as having deficiencies that prohibit or severely restrict, or will prohibit or severely restrict within the next five years due to expected deterioration, the use of a facility for its designated function. Capital improvements and/or repairs further define Substandard as having deficiencies that can be economically corrected (compared with replacement).</p>
+				<p><strong>Substandard Other Measure (sub_other):</strong> The capacity or size in other measure of a facility or portion thereof that is in substandard condition and associated with a designated function (use) and designated user. Substandard is defined as having deficiencies that prohibit or severely restrict, or will prohibit or severely restrict within the next five years due to expected deterioration, the use of a facility for its designated function. Capital improvements and/or repairs further define Substandard as having deficiencies that can be economically corrected (compared with replacement).</p>
+				<p><strong>Substandard Alternate Measure (sub_alt):</strong> The capacity or size in alternate measure of a facility or portion thereof that is in substandard condition and associated with a designated function (use) and designated user. Substandard is defined as having deficiencies that prohibit or severely restrict, or will prohibit or severely restrict within the next five years due to expected deterioration, the use of a facility for its designated function. Capital improvements and/or repairs further define Substandard as having deficiencies that can be economically corrected (compared with replacement).</p>
+				<p><strong>Inadequate Area Measure (iadq):</strong> The capacity or size in area measure of a facility or portion thereof that is in inadequate condition and associated with a designated function (use) and a designated user. Inadequate is defined as having deficiencies due to physical deterioration, functional inadequacy or hazardous location which prohibit or severely restrict, or will prohibit or severely restrict within the next five years, the use of a facility for its designated function. Inadequate is further defined as having deficiencies, which cannot be economically corrected (compared with replacement) to meet the requirements of the designated function.</p>
+				<p><strong>Inadequate Other Measure (iadq_other):</strong> The capacity or size in other measure of a facility or portion thereof that is in inadequate condition and associated with a designated function (use) and a designated user. Inadequate is defined as having deficiencies due to physical deterioration, functional inadequacy or hazardous location which prohibit or severely restrict, or will prohibit or severely restrict within the next five years, the use of a facility for its designated function. Inadequate is further defined as having deficiencies, which cannot be economically corrected (compared with replacement) to meet the requirements of the designated function.</p>
+				<p><strong>Inadequate Alternate Measure (iadq_alt):</strong> The capacity or size in alternate measure of a facility or portion thereof that is in inadequate condition and associated with a designated function (use) and a designated user. Inadequate is defined as having deficiencies due to physical deterioration, functional inadequacy or hazardous location which prohibit or severely restrict, or will prohibit or severely restrict within the next five years, the use of a facility for its designated function. Inadequate is further defined as having deficiencies, which cannot be economically corrected (compared with replacement) to meet the requirements of the designated function.</p>
+				<p><strong>Build_dt:</strong> The century and year, e.g., 20XX, when the initial construction of a Class 2 facility was completed. Where not available, a “best estimate” is used.</p>
+				<p>References: <a href="https://www.navfac.navy.mil/products_and_services/am/about_us/resources.html">NAVFAC P-78</a> | <a href="https://www.wbdg.org/ffc/dod/unified-facilities-criteria-ufc/ufc-2-000-05n">NAVFAC P-72</a> | <a href="https://www.wbdg.org/ffc/dod/unified-facilities-criteria-ufc/ufc-2-000-05n">NAVFAC Appendix A P72</a> | <a href="https://www.marines.mil/Portals/1/Publications/MCO%20P11000.5G%20W%20CH%201.pdf">MCO P11000.5G</a></p>
+			</div>
 			</div>
 		</div>
 
@@ -260,16 +333,22 @@
 				createGroupTables(data);
 			});
 		});
-
-		graph1();						
 		
+		const fs = require('fs');
+		const papa = require('papaparse');
+		const file = fs.createReadStream('https://raw.githubusercontent.com/rkto11/mccs/main/data/df_final.csv');
+		console.log(papa.parse(file,{
+			worker: true,
+			step: function(result) {},
+		 complete: function(results, file){console.log('done')}
+		}
+	
+));
 
 		function topFunction() {
  			document.body.scrollTop = 0;
   			document.documentElement.scrollTop = 0;
 		}
-
-		
 	</script>
 </body>
 </html>

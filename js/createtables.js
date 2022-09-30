@@ -262,12 +262,13 @@ function createFSRM(input, groupdata){
             var RMTotal = 0;
             var TotalCost = 0;
             var FacSqFt =  0;
-            
+            var counter = 0;
             for (var i=0; i < dataset.length ; i++){
                 if(dataset[i][key]=== value[j]){
                     SusTotal += parseFloat(dataset[i].sus);
                     RMTotal += parseFloat(dataset[i].RM_corrected);
                     FacSqFt += parseFloat(dataset[i].total_measure);
+                    counter++;
                 }
             }
 
@@ -309,7 +310,6 @@ function groupSumCount(input, filters) { //include summation of utilization and 
 
         return r.set(key,item);
     }, new Map).values()];
-    console.log(result);
 
 
 
