@@ -159,9 +159,25 @@
 					</div>
 					<script src="./js/creategraphs.js"></script>
 				</div>
+
+				<div class="container" id="qrating">
+					<h2>Exploring Q-Rating</h2>
+					<div style="text-align: left">
+						<p>Number of <b>facilities</b> by Q-Rating</p>
+						<p id="pq1"></p>
+					</div>
+					<h4>Category</h4>
+					<table class="table display dt-responsive" id="tabCatQ" style="width:100%"></table>
+					<h4>Region</h4>
+					<table class="table display dt-responsive" id="tabRegQ" style="width:100%"></table>
+					<h4>Program</h4>
+					<table class="table display dt-responsive" id="tabProQ" style="width:100%"></table>
+					<h4>Installation</h4>
+					<table class="table display dt-responsive" id="tabInsQ" style="width:100%"></table>
+				</div>
 			
 
-			<div id="data-dictionary" class="section level1" style="text-align: left">
+				<div id="data-dictionary" class="section level1" style="text-align: left">
 				<h1 class="text-center">Data Dictionary</h1>
 				<p><strong>Region:</strong> Installations grouped within their perspective geographical region. There is a total of 5 regions (MCIWEST, MCIEAST, MCIPAC, MCINCR, SLTI) The following locations are not associated with a region in the data set:</p>
 				<ol style="list-style-type: decimal">
@@ -330,6 +346,7 @@
 			$.get('https://raw.githubusercontent.com/rkto11/mccs/main/data/df_final.csv', function (theData) {
 				var data = $.csv.toObjects(theData);
 				createGroupTables(data);
+				createQratingTables(data);
 			});
 		});
 		

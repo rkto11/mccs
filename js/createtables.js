@@ -27,6 +27,10 @@ function createGroupTables(input){
     var ProgramTable = createTable(ProgramData);
     var CCNDescTable = createTable(CCNDescData);
 
+    var numFormat = $.fn.dataTable.render.number('\,', '.', 0, '$' ).display;
+    var numFormat2 = $.fn.dataTable.render.number('\,', '.', 0).display;
+    var numFormat3 = $.fn.dataTable.render.number('\,', '.', 2, '$' ).display;
+
     $('#tabCat').html(CategoryTable);
     $(document).ready(function () {
         $('#tabCat').dataTable({
@@ -59,13 +63,13 @@ function createGroupTables(input){
                 var total = api.column(3).data().reduce( function (a, b) {return intVal(a) + intVal(b);});
                 var tsf = api.column(4).data().reduce( function (a, b) {return intVal(a) + intVal(b);});
                 
-                var numFormat = $.fn.dataTable.render.number('\,', '.', 0, '$' ).display;
-                var numFormat2 = $.fn.dataTable.render.number('\,', '.', 0).display;
 
+                $(api.column(0).footer()).html('Total FSRM');
                 $(api.column(1).footer()).html(numFormat(sus));
                 $(api.column(2).footer()).html(numFormat(RM));
                 $(api.column(3).footer()).html(numFormat(total));
                 $(api.column(4).footer()).html(numFormat2(tsf));
+                $(api.column(5).footer()).html(numFormat3(total/tsf));
             }
         });
     });
@@ -103,13 +107,12 @@ function createGroupTables(input){
                 var total = api.column(3).data().reduce( function (a, b) {return intVal(a) + intVal(b);});
                 var tsf = api.column(4).data().reduce( function (a, b) {return intVal(a) + intVal(b);});
                 
-                var numFormat = $.fn.dataTable.render.number('\,', '.', 0, '$' ).display;
-                var numFormat2 = $.fn.dataTable.render.number('\,', '.', 0).display;
-
+                $(api.column(0).footer()).html('Total FSRM');
                 $(api.column(1).footer()).html(numFormat(sus));
                 $(api.column(2).footer()).html(numFormat(RM));
                 $(api.column(3).footer()).html(numFormat(total));
                 $(api.column(4).footer()).html(numFormat2(tsf));
+                $(api.column(5).footer()).html(numFormat3(total/tsf));
             }
         });
     });
@@ -146,14 +149,13 @@ function createGroupTables(input){
                 var RM = api.column(2).data().reduce(function(a,b){return intVal(a) +intVal(b);});
                 var total = api.column(3).data().reduce( function (a, b) {return intVal(a) + intVal(b);});
                 var tsf = api.column(4).data().reduce( function (a, b) {return intVal(a) + intVal(b);});
-                
-                var numFormat = $.fn.dataTable.render.number('\,', '.', 0, '$' ).display;
-                var numFormat2 = $.fn.dataTable.render.number('\,', '.', 0).display;
 
+                $(api.column(0).footer()).html('Total FSRM');
                 $(api.column(1).footer()).html(numFormat(sus));
                 $(api.column(2).footer()).html(numFormat(RM));
                 $(api.column(3).footer()).html(numFormat(total));
                 $(api.column(4).footer()).html(numFormat2(tsf));
+                $(api.column(5).footer()).html(numFormat3(total/tsf));
             }
         });
     });
@@ -191,13 +193,12 @@ function createGroupTables(input){
                 var total = api.column(3).data().reduce( function (a, b) {return intVal(a) + intVal(b);});
                 var tsf = api.column(4).data().reduce( function (a, b) {return intVal(a) + intVal(b);});
                 
-                var numFormat = $.fn.dataTable.render.number('\,', '.', 0, '$' ).display;
-                var numFormat2 = $.fn.dataTable.render.number('\,', '.', 0).display;
-
+                $(api.column(0).footer()).html('Total FSRM');
                 $(api.column(1).footer()).html(numFormat(sus));
                 $(api.column(2).footer()).html(numFormat(RM));
                 $(api.column(3).footer()).html(numFormat(total));
                 $(api.column(4).footer()).html(numFormat2(tsf));
+                $(api.column(5).footer()).html(numFormat3(total/tsf));
             }
         });
     });
@@ -207,7 +208,7 @@ function createGroupTables(input){
         $('#tabCCN').dataTable({
             data: CCNDescData,
             "bLengthChange": false,
-            "bFilter": false,
+            "bFilter": true,
             "bInfo": false,
             order: [[3, 'desc']],
             columns: [
@@ -243,9 +244,127 @@ function createGroupTables(input){
                 $(api.column(2).footer()).html(numFormat(RM));
                 $(api.column(3).footer()).html(numFormat(total));
                 $(api.column(4).footer()).html(numFormat2(tsf));
+                $(api.column(5).footer()).html(numFormat3(total/tsf));
             }
             
         
+        });
+    });
+}
+
+function createQratingTables(input){
+    var data = input;
+
+    var totalQ = totalQcalc(data);
+    function totalQcalc(dataset){    
+    var counter1=0, counter2=0, counter3=0, counter4=0;
+        var QRating=[];
+            for(var i=0; i<dataset.length; i++){
+                if(dataset[i].fci >= 90){
+                        counter1++;
+                    }
+                if(dataset[i].fci < 90 && dataset[i].fci >= 80){
+                        counter2++;
+                    }
+                if(dataset[i].fci < 80 && dataset[i].fci >= 60){
+                        counter3++;
+                    }
+                if(dataset[i].fci < 60){
+                        counter4++;
+                    }
+            }
+            QRating = [counter1, counter2, counter3, counter4];
+            return QRating;
+    }
+    document.getElementById('pq1').innerHTML = "<ul> <li>Q1: " + totalQ[0] + "</li><li> Q2: " + totalQ[1] + "</li><li>Q3: " + totalQ[2]+ "</li><li>Q4: " + totalQ[3] + "</li><ul>";
+
+    var Category = ['Category', 'naf_cat'];
+    var Region = ['Region', 'region'];
+    var Program = ['Program', 'op_activity']; //Seperate by Category
+    var Installation = ['Installation', 'installation'];
+
+    Category.push([...new Set(data.map(item => item.naf_cat))]);
+    Region.push([...new Set(data.map(item => item.region))]);
+    Program.push([...new Set(data.map(item => item.op_activity))]);
+    Installation.push([...new Set(data.map(item => item.installation))]);
+
+    var CatQ = qfromfci(data,Category);
+    var RegQ = qfromfci(data,Region);
+    var ProQ = qfromfci(data,Program);
+    var InsQ = qfromfci(data,Installation);
+
+    var tableCatQ = createTablenf(CatQ);
+    var tableRegQ = createTablenf(RegQ);
+    var tableProQ = createTablenf(ProQ);
+    var tableInsQ = createTablenf(InsQ);
+
+    $('#tabCatQ').html(tableCatQ);
+    $(document).ready(function () {
+        $('#tabCatQ').dataTable({
+            data: CatQ,
+            paging: false,
+            "bLengthChange": false,
+            "bFilter": false,
+            "bInfo": false,
+            columns: [
+                {data: 'Category'},
+                {data: 'QRating'},
+                {data: 'Count'},
+                {data: 'Percentage',render: $.fn.dataTable.render.number(',', '.', 2,'', '%')}
+            ]
+        });
+    });
+
+    $('#tabRegQ').html(tableRegQ);
+    $(document).ready(function () {
+        $('#tabRegQ').dataTable({
+            data: RegQ,
+            paging: true,
+            "bLengthChange": false,
+            "bFilter": true,
+            "bInfo": false,
+            columns: [
+                {data: 'Region'},
+                {data: 'QRating'},
+                {data: 'Count'},
+                {data: 'Percentage',render: $.fn.dataTable.render.number(',', '.', 2,'', '%')}
+            ]
+        });
+    });
+
+
+    //Have to seperate by Category
+    $('#tabProQ').html(tableProQ);   
+    $(document).ready(function () {
+        $('#tabProQ').dataTable({
+            data: ProQ,
+            paging: true,
+            "bLengthChange": false,
+            "bFilter": true,
+            "bInfo": false,
+            columns: [
+                {data: 'Program'},
+                {data: 'QRating'},
+                {data: 'Count'},
+                {data: 'Percentage',render: $.fn.dataTable.render.number(',', '.', 2,'', '%')}
+            ]
+        });
+    });
+
+    $('#tabInsQ').html(tableInsQ);
+    $(document).ready(function () {
+        $('#tabInsQ').dataTable({
+            data: InsQ,
+            paging: true,
+            "bLengthChange": false,
+            "bFilter": true,
+            "bInfo": false,
+            columns: [
+                {data: 'Installation'},
+                {data: 'QRating'},
+                {data: 'Count'},
+                {data: 'Percentage',render: $.fn.dataTable.render.number(',', '.', 2,'', '%')}
+            ]
         });
     });
 }
@@ -332,7 +451,43 @@ function groupSumCount(input, filters) { //include summation of utilization and 
     console.log(result);*/
 }
 
+function qfromfci(data, filters){
+    var output = [];
+    var HN = filters[0];
+    var k = filters[1];
+    var arr =  filters[2];
+   for(var j=0; j<arr.length; j++){
+    var counter=0, counter1=0, counter2=0, counter3=0, counter4=0;
+    var per1 = 0, per2=0, per3=0, per4=0;
+        for(var i=0; i<data.length; i++){
+            if(data[i][k] === arr[j]){
+                if(data[i].fci >= 90){
+                    counter1++;
+                }
+                if(data[i].fci < 90 && data[i].fci >= 80){
+                    counter2++;
+                }
+                if(data[i].fci < 80 && data[i].fci >= 60){
+                    counter3++;
+                }
+                if(data[i].fci < 60){
+                    counter4++;
+                }
+                counter++;
+            }
+        }
+        per1 = counter1/counter*100;
+        per2 = counter2/counter*100;
+        per3 = counter3/counter*100;
+        per4 = counter4/counter*100;
 
+        output.push({[HN]: arr[j], "QRating": "Q1", Count: counter1, Percentage: per1});
+        output.push({[HN]: arr[j], "QRating": "Q2", Count: counter2, Percentage: per2});
+        output.push({[HN]: arr[j], "QRating": "Q3", Count: counter3, Percentage: per3});
+        output.push({[HN]: arr[j], "QRating": "Q4", Count: counter4, Percentage: per4});
+    }
+    return output;
+}
 
 
 
@@ -351,7 +506,7 @@ function createTable(data) {
         html += '</thead>\r\n';
         html += '<tfoot>\r\n';
         html += '<tr>\r\n';
-        html += '<th>Total FSRM</th>\r\n'
+        html += '<th></th>\r\n'
         for (var i=1; i<t; i++) {
             html += '<th></th>\r\n';
         }
@@ -360,3 +515,18 @@ function createTable(data) {
     }
     return html;
 }
+function createTablenf(data) {
+    var html = '';
+
+    if (data[0].constructor === Object) {
+        html += '<thead>\r\n';
+        html += '<tr>\r\n';
+        for (var item in data[0]) {
+            html += '<th>' + item + '</th>\r\n';
+        }
+        html += '</tr>\r\n';
+        html += '</thead>\r\n';
+    }
+    return html;
+}
+

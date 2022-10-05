@@ -148,13 +148,13 @@ function updatebar(inputstring) {
             const catdata = groupdata(data, "category");
 
             if (inputstring === "instdata"){
-                var outdata  = instdata;
+                var outdata  = instdata.slice().sort((a,b) => d3.descending(a.value,b.value));
             }
             if (inputstring === "regdata"){
-                var outdata = regdata;
+                var outdata = regdata.slice().sort((a,b) => d3.descending(a.value,b.value));
             }
             if (inputstring === "catdata"){
-                var outdata = catdata;
+                var outdata = catdata.slice().sort((a,b) => d3.descending(a.value,b.value));
             }
 
     // Update the X axis
