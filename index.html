@@ -18,6 +18,8 @@
 	<script src="./js/jquery.csv.js"></script>
 	<script src="./js/datatables.min.js"></script>
 	<script src="./js/createtables.js"></script>
+	<script src="./js/creategraphs.js"></script>
+	<script src="./js/box.js"></script>
 	<title>Plans, Policy, and Analysis</title>
 </head>
 
@@ -190,15 +192,8 @@
 					<div id="proBox"></div>
 					<h4>Use Category</h4>
 					<table class="table display dt-responsive" id="tabCCNStats" style="width:100%"></table>
-					<div id="CCNBox"></div>
-					<script>boxplot('QRating', 'div#qBox');
-						boxplot('Category', 'div#catBox');
-						boxplot('Region', 'div#regBox');
-						boxplot('Installation', 'div#insBox');
-						boxplot('Program', 'div#proBox');
-						boxplot('Use_Category', 'div#CCNBox');
-						</script>
 				</div>
+				
 				<hr><br>
 				<div id="data-dictionary" class="section level1" style="text-align: left">
 				<h1 class="text-center">Data Dictionary</h1>
@@ -261,7 +256,6 @@
 				<p>References: <a href="https://www.navfac.navy.mil/products_and_services/am/about_us/resources.html">NAVFAC P-78</a> | <a href="https://www.wbdg.org/ffc/dod/unified-facilities-criteria-ufc/ufc-2-000-05n">NAVFAC P-72</a> | <a href="https://www.wbdg.org/ffc/dod/unified-facilities-criteria-ufc/ufc-2-000-05n">NAVFAC Appendix A P72</a> | <a href="https://www.marines.mil/Portals/1/Publications/MCO%20P11000.5G%20W%20CH%201.pdf">MCO P11000.5G</a></p>
 				</div>
 			</div>
-			<script src="./js/creategraphs.js"></script>
 		</div>
 
 
@@ -372,6 +366,14 @@
 				createCostTables(data);
 				createQratingTables(data);
 				createAgeTables(data);
+				createSqFtLine();
+				updatebar('catdata');
+				boxplot('QRating', 'div#qBox');
+				boxplot('Category', 'div#catBox');
+				boxplot('Region', 'div#regBox');
+				boxplot('Installation','div#insBox');
+				boxplot('Program','div#proBox');
+				
 			});
 		});
 		
