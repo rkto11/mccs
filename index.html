@@ -111,7 +111,7 @@
 				<div id="facnav"></div>
 			</aside>
 			<div id="FacContents">
-				<div class="container">
+				<div class="container" id="FacDesc">
 						<h1>MCCS Facilities Exploratory Analysis</h1>
 						<p>Note: The current report is based on utilization information unless otherwise noted.</p>
 						<p>Facility Sustainment, Restortation, and Modernization (FSRM) calculations are resource agnostic.</p>
@@ -119,14 +119,13 @@
 						<p>Raw  data pulled from GoRPM on <i>make this autofilled date from file</i>.</p>
 						<p>Download raw data here: "link here"</p>
 						<p>Download cleaned data here: "link here"</p>
-						<h2>Exploring Costs</h2>
-						<br>
-						<h3>Cost by Category</h3>
-						<p> Facility Sustainment, Resportation, and Modernization (FSRM) </p>
-						<br>
 				</div>
-
+				<hr><br>
 				<div class="container" id="FacCharts">
+					<h2>Exploring Costs</h2>
+					<h3>Cost by Category</h3>
+					<p> Facility Sustainment, Resportation, and Modernization (FSRM) </p>
+					<br>
 					<!--see createtables.js for table generation-->
 					<h4>FY24 MCCS FSRM Cost by Category</h4>
 						<table class="table display dt-responsive" id="tabCat" style="width:100%"></table>
@@ -143,23 +142,19 @@
 					<h4>FY24 MCCS FSRM Cost by Use Category</h4>
 						<table class="table display dt-responsive" id="tabCCN" style="width:100%"></table>
 				</div>
-
+				<hr><br>
 				<div class="container" id="FacGraphs">
 					<div id="g1">
-						<div id="firstvisual"></div>
-						<p>some text here</p>
+						<div id="sqftovertime"></div>
 					</div>
-					<br />
-					<div id="g2">
+					<div id="sqftbar">
 						<button onclick="updatebar('catdata')">Category</button>
 						<button onclick="updatebar('regdata')">Region</button>
 						<button onclick="updatebar('instdata')">Installation</button>
-						<div id="barchart"></div>
-						<p>more text here</p>
+						<div id="groupedsqft"></div>
 					</div>
-					<script src="./js/creategraphs.js"></script>
 				</div>
-
+				<hr><br>
 				<div class="container" id="qrating">
 					<h2>Exploring Q-Rating</h2>
 					<div style="text-align: left">
@@ -175,8 +170,29 @@
 					<h4>Installation</h4>
 					<table class="table display dt-responsive" id="tabInsQ" style="width:100%"></table>
 				</div>
-			
-
+				<hr><br>
+				<div class="container" id="FacStats">
+					<h2>Exploring the age of facilities</h2>
+					<h4>Q-Rating</h4>
+					<table class="table display dt-responsive" id="tabQStats" style="width:100%"></table>
+					<div id="qBox"></div>
+					<h4>Category</h4>
+					<table class="table display dt-responsive" id="tabCatStats" style="width:100%"></table>
+					<div id="catBox"></div>
+					<h4>Region</h4>
+					<table class="table display dt-responsive" id="tabRegStats" style="width:100%"></table>
+					<div id="regBox"></div>
+					<h4>Installation</h4>
+					<table class="table display dt-responsive" id="tabInsStats" style="width:100%"></table>
+					<div id="insBox"></div>
+					<h4>Program</h4>
+					<table class="table display dt-responsive" id="tabProStats" style="width:100%"></table>
+					<div id="proBox"></div>
+					<h4>Use Category</h4>
+					<table class="table display dt-responsive" id="tabCCNStats" style="width:100%"></table>
+					<div id="CCNBox"></div>
+				</div>
+				<hr><br>
 				<div id="data-dictionary" class="section level1" style="text-align: left">
 				<h1 class="text-center">Data Dictionary</h1>
 				<p><strong>Region:</strong> Installations grouped within their perspective geographical region. There is a total of 5 regions (MCIWEST, MCIEAST, MCIPAC, MCINCR, SLTI) The following locations are not associated with a region in the data set:</p>
@@ -236,8 +252,9 @@
 				<p><strong>Inadequate Alternate Measure (iadq_alt):</strong> The capacity or size in alternate measure of a facility or portion thereof that is in inadequate condition and associated with a designated function (use) and a designated user. Inadequate is defined as having deficiencies due to physical deterioration, functional inadequacy or hazardous location which prohibit or severely restrict, or will prohibit or severely restrict within the next five years, the use of a facility for its designated function. Inadequate is further defined as having deficiencies, which cannot be economically corrected (compared with replacement) to meet the requirements of the designated function.</p>
 				<p><strong>Build_dt:</strong> The century and year, e.g., 20XX, when the initial construction of a Class 2 facility was completed. Where not available, a “best estimate” is used.</p>
 				<p>References: <a href="https://www.navfac.navy.mil/products_and_services/am/about_us/resources.html">NAVFAC P-78</a> | <a href="https://www.wbdg.org/ffc/dod/unified-facilities-criteria-ufc/ufc-2-000-05n">NAVFAC P-72</a> | <a href="https://www.wbdg.org/ffc/dod/unified-facilities-criteria-ufc/ufc-2-000-05n">NAVFAC Appendix A P72</a> | <a href="https://www.marines.mil/Portals/1/Publications/MCO%20P11000.5G%20W%20CH%201.pdf">MCO P11000.5G</a></p>
+				</div>
 			</div>
-			</div>
+			<script src="./js/creategraphs.js"></script>
 		</div>
 
 
@@ -345,8 +362,9 @@
 		$(document).ready(function () {
 			$.get('https://raw.githubusercontent.com/rkto11/mccs/main/data/df_final.csv', function (theData) {
 				var data = $.csv.toObjects(theData);
-				createGroupTables(data);
+				createCostTables(data);
 				createQratingTables(data);
+				createAgeTables(data);
 			});
 		});
 		

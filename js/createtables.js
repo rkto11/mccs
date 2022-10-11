@@ -1,4 +1,5 @@
-function createGroupTables(input){
+//create datatables called via ID
+function createCostTables(input){
     var data = input;
     var CatC = filter(data, {naf_cat: 'C'});
     var Category = ['Category', 'naf_cat'];
@@ -34,6 +35,7 @@ function createGroupTables(input){
     $('#tabCat').html(CategoryTable);
     $(document).ready(function () {
         $('#tabCat').dataTable({
+            
             data: CategoryData,
             paging: false,
             "bLengthChange": false,
@@ -46,6 +48,7 @@ function createGroupTables(input){
                 {data: 'Total',render: $.fn.dataTable.render.number(',', '.', 0, '$' )},
                 {data: 'SqFt',render: $.fn.dataTable.render.number(',', '.', 0)},
                 {data: 'Price per SqFt',render: $.fn.dataTable.render.number(',', '.', 2, '$' )}
+                
             ],
             
         
@@ -70,7 +73,10 @@ function createGroupTables(input){
                 $(api.column(3).footer()).html(numFormat(total));
                 $(api.column(4).footer()).html(numFormat2(tsf));
                 $(api.column(5).footer()).html(numFormat3(total/tsf));
-            }
+            },
+            dom: 'Brftip',
+            buttons: [{extend: 'excelHtml5'}],
+            
         });
     });
 
@@ -251,7 +257,6 @@ function createGroupTables(input){
         });
     });
 }
-
 function createQratingTables(input){
     var data = input;
 
@@ -292,7 +297,7 @@ function createQratingTables(input){
     var RegQ = qfromfci(data,Region);
     var ProQ = qfromfci(data,Program);
     var InsQ = qfromfci(data,Installation);
-
+    
     var tableCatQ = createTablenf(CatQ);
     var tableRegQ = createTablenf(RegQ);
     var tableProQ = createTablenf(ProQ);
@@ -304,7 +309,7 @@ function createQratingTables(input){
             data: CatQ,
             paging: false,
             "bLengthChange": false,
-            "bFilter": false,
+            "bFilter": true,
             "bInfo": false,
             columns: [
                 {data: 'Category'},
@@ -368,7 +373,180 @@ function createQratingTables(input){
         });
     });
 }
+function createAgeTables(input){
+    var data = input;
+    var CleanData = qratingfromfci(data);
+    function qratingfromfci(dataset){
+        var arr = [];
+        for(var i=0; i<dataset.length; i++){
+            var qr = '';
+            if(dataset[i].fci >= 90){
+                qr = 'Q1';
+            }
+            if(dataset[i].fci < 90 && data[i].fci >= 80){
+                qr = 'Q2';
+            }
+            if(dataset[i].fci < 80 && data[i].fci >= 60){
+                qr = 'Q3';
+            }
+            if(dataset[i].fci < 60){
+                qr = 'Q4';
+            }
+            arr.push({"Region": dataset[i].region, "Installation": dataset[i].installation, "Program": dataset[i].op_activity, "Use_Category": dataset[i].use_desc, "Category": dataset[i].naf_cat, "QRating": qr, "Age": getAge(dataset[i].build_dt)})
+        }
+        return arr;
+    }
+    var qFilter = ['QRating'];
+    var catFilter = ['Category'];
+    var regFilter = ['Region'];
+    var proFilter = ['Program']; //Seperate by Category
+    var insFilter = ['Installation'];
+    var CCNFilter = ['Use_Category'];
+    
+    qFilter.push([...new Set(CleanData.map(item => item.QRating))])
+    catFilter.push([...new Set(CleanData.map(item => item.Category))]);
+    regFilter.push([...new Set(CleanData.map(item => item.Region))]);
+    proFilter.push([...new Set(CleanData.map(item => item.Program))]);
+    insFilter.push([...new Set(CleanData.map(item => item.Installation))]);
+    CCNFilter.push([...new Set(CleanData.map(item => item.Use_Category))]);
 
+    var qStats = calcStats(CleanData, qFilter);
+    var catStats = calcStats(CleanData, catFilter);
+    var regStats = calcStats(CleanData, regFilter);
+    var proStats = calcStats(CleanData, proFilter);
+    var insStats = calcStats(CleanData, insFilter);
+    var CCNStats = calcStats(CleanData, CCNFilter);
+
+    var tableQStats = createTablenf(qStats);
+    var tableCatStats = createTablenf(catStats);
+    var tableRegStats = createTablenf(regStats);
+    var tableProStats = createTablenf(proStats);
+    var tableInsStats = createTablenf(insStats);
+    var tableCCNStats = createTablenf(CCNStats);
+
+    $('#tabQStats').html(tableQStats);
+    $(document).ready(function () {
+        $('#tabQStats').dataTable({
+            data: qStats,
+            paging: false,
+            "bLengthChange": false,
+            "bFilter": false,
+            "bInfo": false,
+            columns: [
+                {data: 'QRating'},
+                {data: 'Mean'},
+                {data: 'Median'},
+                {data: 'StandardDev'},
+                {data: 'Minimum'},
+                {data: 'Maximum'},
+                {data: 'Range'}
+            ]
+        });
+    });
+
+    $('#tabCatStats').html(tableCatStats);
+    $(document).ready(function () {
+        $('#tabCatStats').dataTable({
+            data: catStats,
+            paging: false,
+            "bLengthChange": false,
+            "bFilter": false,
+            "bInfo": false,
+            columns: [
+                {data: 'Category'},
+                {data: 'Mean'},
+                {data: 'Median'},
+                {data: 'StandardDev'},
+                {data: 'Minimum'},
+                {data: 'Maximum'},
+                {data: 'Range'}
+            ]
+        });
+    });
+
+    $('#tabRegStats').html(tableRegStats);
+    $(document).ready(function () {
+        $('#tabRegStats').dataTable({
+            data: regStats,
+            paging: false,
+            "bLengthChange": false,
+            "bFilter": false,
+            "bInfo": false,
+            columns: [
+                {data: 'Region'},
+                {data: 'Mean'},
+                {data: 'Median'},
+                {data: 'StandardDev'},
+                {data: 'Minimum'},
+                {data: 'Maximum'},
+                {data: 'Range'}
+            ]
+        });
+    });
+
+    $('#tabInsStats').html(tableInsStats);
+    $(document).ready(function () {
+        $('#tabInsStats').dataTable({
+            data: insStats,
+            paging: true,
+            "bLengthChange": false,
+            "bFilter": true,
+            "bInfo": false,
+            columns: [
+                {data: 'Installation'},
+                {data: 'Mean'},
+                {data: 'Median'},
+                {data: 'StandardDev'},
+                {data: 'Minimum'},
+                {data: 'Maximum'},
+                {data: 'Range'}
+            ]
+        });
+    });
+
+    $('#tabProStats').html(tableProStats);
+    $(document).ready(function () {
+        $('#tabProStats').dataTable({
+            data: proStats,
+            paging: false,
+            "bLengthChange": false,
+            "bFilter": false,
+            "bInfo": false,
+            columns: [
+                {data: 'Program'},
+                {data: 'Mean'},
+                {data: 'Median'},
+                {data: 'StandardDev'},
+                {data: 'Minimum'},
+                {data: 'Maximum'},
+                {data: 'Range'}
+            ]
+        });
+    });
+
+    $('#tabCCNStats').html(tableCCNStats);
+    $(document).ready(function () {
+        $('#tabCCNStats').dataTable({
+            data: CCNStats,
+            paging: true,
+            "bLengthChange": false,
+            "bFilter": true,
+            "bInfo": false,
+            columns: [
+                {data: 'Use_Category'},
+                {data: 'Mean'},
+                {data: 'Median'},
+                {data: 'StandardDev'},
+                {data: 'Minimum'},
+                {data: 'Maximum'},
+                {data: 'Range'}
+            ]
+        });
+    });
+}
+
+
+//functions called by create___tables functions
 function createFSRM(input, groupdata){	
     var data = input;
     var HN = groupdata[0];
@@ -407,7 +585,6 @@ function createFSRM(input, groupdata){
     
     return Output;
 }
-
 function filter(arr, criteria) { //e.g. data,{ "naf_cat", "C"}
     return arr.filter(function(obj) {
         return Object.keys(criteria).every(function(c) {
@@ -415,8 +592,6 @@ function filter(arr, criteria) { //e.g. data,{ "naf_cat", "C"}
         });
     });
 }
-
-
 function groupSumCount(input, filters) { //include summation of utilization and monetary values
     var data = input;
     const result = [...data.reduce((r,o)   =>{
@@ -450,7 +625,6 @@ function groupSumCount(input, filters) { //include summation of utilization and 
     }, new Map).values()];
     console.log(result);*/
 }
-
 function qfromfci(data, filters){
     var output = [];
     var HN = filters[0];
@@ -488,9 +662,58 @@ function qfromfci(data, filters){
     }
     return output;
 }
+function getAge(input){
+    var today = new Date();
+    var builddate = new Date(input);
+    var age = today.getFullYear() - builddate.getFullYear();
+    var  m = today.getMonth() - builddate.getMonth();
+    if(m<0 || (m === 0 && today.getDate() < builddate.getDate())){
+        age--;
+    }
+    return age;
+}
+function calcStats(input, arr) {
+    var output  = [];
+    var HN = arr[0];
+    var k = arr[1];
+    for(i=0; i<k.length; i++){
+        var temp = [];
+        for(j=0; j<input.length; j++){
+            if(input[j][HN] === k[i] && input[j].Age > 0){
+                temp.push(input[j].Age);
+            }
+        }
+        function median(values){
+            if(values.length ===0) throw new Error("No inputs");
+          
+            values.sort(function(a,b){
+              return a-b;
+            });
+          
+            var half = Math.floor(values.length / 2);
+            
+            if (values.length % 2)
+              return values[half];
+            
+            return (values[half - 1] + values[half]) / 2.0;
+        }
+        function getStandardDeviation (array) {
+            const n = array.length
+            const mean = array.reduce((a, b) => a + b) / n
+            return Math.sqrt(array.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n)
+        }
+        var avg = Math.round(temp.reduce((a, b) => a + b, 0)/temp.length);
+        var med = median(temp);
+        var std = Math.round(getStandardDeviation(temp));
+        var Min = Math.min(...temp);
+        var Max = Math.max(...temp);
+        var Rng = Max - Min;
+        output.push({[HN]: k[i], Mean: avg, Median: med, StandardDev: std, Minimum: Min, Maximum: Max, Range: Rng});
+    }
+    return output;
+}
 
-
-
+//Table generators
 function createTable(data) {
     var html = '';
 
