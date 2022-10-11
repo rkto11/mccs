@@ -362,9 +362,9 @@
 		$(document).ready(function () {
 			$.get('https://raw.githubusercontent.com/rkto11/mccs/main/data/df_final.csv', function (theData) {
 				var data = $.csv.toObjects(theData);
-				createCostTables(data);
-				createQratingTables(data);
-				createAgeTables(data);
+				var costs = createCostTables(data);
+				var qrates = createQratingTables(data);
+				var ages = createAgeTables(data);
 			});
 		});
 		
