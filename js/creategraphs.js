@@ -197,12 +197,6 @@ function updatebar(inputstring) {
         .attr("fill", "#69b3a2")
     })
 }
-boxplot('QRating', 'div#qBox');
-boxplot('Category', 'div#catBox');
-boxplot('Region', 'div#regBox');
-boxplot('Installation', 'div#insBox');
-boxplot('Program', 'div#proBox');
-boxplot('Use_Category', 'div#CCNBox');
 
 ////////////////////////////
 // Box and Whiskers Charts
@@ -310,7 +304,7 @@ function boxplot (grouping, destination){ //'Category', 'div#catBox'
                 for (i=0; i<input.length; i++){
                     if (input[i].Outliers.length> 0){
                         for (j=0;j<input[i].Outliers.length; j++){
-                        arr.push({Dom: input[i].Dom, Age: input[i].Outliers[j]})
+                        arr.push({Dom: input[i].Dom, Age: input[i].Outliers[j]});
                         }
                     }
                 }

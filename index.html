@@ -191,6 +191,13 @@
 					<h4>Use Category</h4>
 					<table class="table display dt-responsive" id="tabCCNStats" style="width:100%"></table>
 					<div id="CCNBox"></div>
+					<script>boxplot('QRating', 'div#qBox');
+						boxplot('Category', 'div#catBox');
+						boxplot('Region', 'div#regBox');
+						boxplot('Installation', 'div#insBox');
+						boxplot('Program', 'div#proBox');
+						boxplot('Use_Category', 'div#CCNBox');
+						</script>
 				</div>
 				<hr><br>
 				<div id="data-dictionary" class="section level1" style="text-align: left">
@@ -362,9 +369,9 @@
 		$(document).ready(function () {
 			$.get('https://raw.githubusercontent.com/rkto11/mccs/main/data/df_final.csv', function (theData) {
 				var data = $.csv.toObjects(theData);
-				var costs = createCostTables(data);
-				var qrates = createQratingTables(data);
-				var ages = createAgeTables(data);
+				createCostTables(data);
+				createQratingTables(data);
+				createAgeTables(data);
 			});
 		});
 		
