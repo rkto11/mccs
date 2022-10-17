@@ -57,8 +57,6 @@ function groupsumdata(input, stg){
     return result;
 }
 
-
-
 const margin = {top: 10, right: 30, bottom: 70, left: 60},
 width = 800 - margin.left - margin.right,
 height = 300 - margin.top - margin.bottom;
@@ -68,74 +66,73 @@ height = 300 - margin.top - margin.bottom;
 //line graph
 ////////////////////////
 function createSqFtLine(){
-const svg = d3.select("div#sqftovertime")
-        .classed("svg-ccontainer",true)
-        .append("svg")
-        .attr("preserveAspectRatio","XMidYMid meet")
-        .attr("viewBox","0 0 800 300")
-        .append("g")
-        .attr("transform", `translate(${margin.left},${margin.top})`);
-d3.csv("https://raw.githubusercontent.com/rkto11/mccs/main/data/df_final.csv",
-function(d){
-        return {dx: d3.timeParse("%Y-%m-%d")(formatDate(d.build_dt)), inst: d.installation, reg: d.region, category: d.naf_cat, value : d.total_measure }
-}).then(
-    function(data) {
-        data=removeEmpty(data);
-        data=data.sort(sortby);
-        data = accumulmateData(data);
+    const svg = d3.select("div#sqftovertime")
+            .classed("svg-ccontainer",true)
+            .append("svg")
+            .attr("preserveAspectRatio","XMidYMid meet")
+            .attr("viewBox","0 0 800 300")
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+    d3.csv("https://raw.githubusercontent.com/rkto11/mccs/main/data/df_final.csv",
+    function(d){
+            return {dx: d3.timeParse("%Y-%m-%d")(formatDate(d.build_dt)), inst: d.installation, reg: d.region, category: d.naf_cat, value : d.total_measure }
+    }).then(
+        function(data) {
+            data=removeEmpty(data);
+            data=data.sort(sortby);
+            data = accumulmateData(data);
 
-        const x = d3.scaleTime()
-        .domain(d3.extent(data, function(d) { return d.dx; }))
-        .range([ 0, width ]);
-        svg.append("g")
-        .attr("transform", `translate(0, ${height})`)
-        .call(d3.axisBottom(x));
+            const x = d3.scaleTime()
+            .domain(d3.extent(data, function(d) { return d.dx; }))
+            .range([ 0, width ]);
+            svg.append("g")
+            .attr("transform", `translate(0, ${height})`)
+            .call(d3.axisBottom(x));
 
-        const y = d3.scaleLinear()
-        .domain([0, d3.max(data, function(d) { return +d.value; })])
-        .range([ height, 0 ]);
-        svg.append("g")
-        .call(d3.axisLeft(y));
+            const y = d3.scaleLinear()
+            .domain([0, d3.max(data, function(d) { return +d.value; })])
+            .range([ height, 0 ]);
+            svg.append("g")
+            .call(d3.axisLeft(y));
 
-        svg.append("path")
-        .datum(data)
-        .attr("stroke", "#69b3a2")
-        .attr("fill", "none")
-        .attr("stroke-width", 1.5)
-        .attr("stroke-linejoin", "round")
-        .attr("d", d3.line()
-            .x(function(d) {return x(d.dx)})
-            .y(function(d) {return y(d.value)})
-            )
-    }
-)
+            svg.append("path")
+            .datum(data)
+            .attr("stroke", "#69b3a2")
+            .attr("fill", "none")
+            .attr("stroke-width", 1.5)
+            .attr("stroke-linejoin", "round")
+            .attr("d", d3.line()
+                .x(function(d) {return x(d.dx)})
+                .y(function(d) {return y(d.value)})
+                )
+        }
+    )
 }
 
 ////////////////////////////
 // Bar Chart
 ////////////////////////////
+const svg2 = d3.select("div#groupedsqft")
+.classed("svg-ccontainer",true)
+.append("svg")
+.attr("preserveAspectRatio","XMidYMid meet")
+.attr("viewBox","0 0 800 300")
+.append("g")
+.attr("transform", `translate(${margin.left},${margin.top})`);
 
+const x = d3.scaleBand()
+.range([0,width])
+.padding(0.2);
+const xAxis = svg2.append("g")
+.attr("transform", `translate(0,${height})`)
+
+const y = d3.scaleLinear()
+.range([height,0]);
+const yAxis = svg2.append("g")
+.attr("class","myYaxis")
+
+updatebar('catdata');
 function updatebar(inputstring) {
-    const svg2 = d3.select("div#groupedsqft")
-        .classed("svg-ccontainer",true)
-        .append("svg")
-        .attr("preserveAspectRatio","XMidYMid meet")
-        .attr("viewBox","0 0 800 300")
-        .append("g")
-        .attr("transform", `translate(${margin.left},${margin.top})`);
-
-    const x = d3.scaleBand()
-        .range([0,width])
-        .padding(0.2);
-    const xAxis = svg2.append("g")
-        .attr("transform", `translate(0,${height})`)
-
-    const y = d3.scaleLinear()
-        .range([height,0]);
-    const yAxis = svg2.append("g")
-        .attr("class","myYaxis")
-
-
 
     // fetch/process data
     d3.csv("https://raw.githubusercontent.com/rkto11/mccs/main/data/df_final.csv",

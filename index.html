@@ -18,8 +18,7 @@
 	<script src="./js/jquery.csv.js"></script>
 	<script src="./js/datatables.min.js"></script>
 	<script src="./js/createtables.js"></script>
-	<script src="./js/creategraphs.js"></script>
-	<script src="./js/box.js"></script>
+	
 	<title>Plans, Policy, and Analysis</title>
 </head>
 
@@ -155,6 +154,7 @@
 						<button onclick="updatebar('instdata')">Installation</button>
 						<div id="groupedsqft"></div>
 					</div>
+					<script src="./js/creategraphs.js"></script>
 				</div>
 				<hr><br>
 				<div class="container" id="qrating">
@@ -192,6 +192,15 @@
 					<div id="proBox"></div>
 					<h4>Use Category</h4>
 					<table class="table display dt-responsive" id="tabCCNStats" style="width:100%"></table>
+					<div id="allboxplots">
+						<button onclick="boxplot('QRating')">Q-Rating</button>
+						<button onclick="boxplot('Category')">Category</button>
+						<button onclick="boxplot('Region')">Region</button>
+						<button onclick="boxplot('Installation')">Installation</button>
+						<div id="allBox"></div>
+						<script src="./js/box.js"></script>
+					</div>
+
 				</div>
 				
 				<hr><br>
@@ -258,9 +267,8 @@
 			</div>
 		</div>
 
-
 		<div id="facrecap" class="tab-pane container fade">
-
+			<h1>Recapitalization Plan</h1>
 		</div>
 		<div id="lodging" class="tab-pane container fade">
 
@@ -367,12 +375,12 @@
 				createQratingTables(data);
 				createAgeTables(data);
 				createSqFtLine();
-				updatebar('catdata');
-				boxplot('QRating', 'div#qBox');
+				boxplot('QRating');
+				/* boxplot('QRating', 'div#qBox');
 				boxplot('Category', 'div#catBox');
 				boxplot('Region', 'div#regBox');
 				boxplot('Installation','div#insBox');
-				boxplot('Program','div#proBox');
+				boxplot('Program','div#proBox'); */
 				
 			});
 		});

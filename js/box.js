@@ -1,20 +1,31 @@
 ////////////////////////////
 // Box and Whiskers Charts
 ////////////////////////////
+const margin2 = {top: 10, right: 30, bottom: 70, left: 60},
+width2 = 800 - margin2.left - margin2.right,
+height2 = 300 - margin2.top - margin2.bottom;
 
-function boxplot (grouping, destination){ //'Category', 'div#catBox'
-    const margin2 = {top: 10, right: 30, bottom: 70, left: 60},
-    width = 800 - margin2.left - margin2.right,
-    height = 300 - margin2.top - margin2.bottom;
-    
-
-    const svg3 = d3.select(destination)
+const svg3 = d3.select('div#allBox')
     .classed("svg-ccontainer",true)
     .append("svg")
     .attr("preserveAspectRatio","XMidYMid meet")
     .attr("viewBox","0 0 800 400")
     .append("g")
     .attr("transform", `translate(${margin2.left},${margin2.top})`);
+
+const y3 = d3.scaleBand()
+    .range([height2,0])
+    .padding(.4);
+const yAxis3 = svg3.append('g')
+    .attr('class','myYaxis3');
+
+const x3 = d3.scaleLinear()
+    .range([0,width2]);
+const xAxis3 = svg3.append("g")
+    .attr("transform", "translate(0," + height2 + ")");
+
+function boxplot (grouping){ //'Category'
+
 
     d3.csv("https://raw.githubusercontent.com/rkto11/mccs/main/data/df_final.csv",
     function process(d){
@@ -31,79 +42,82 @@ function boxplot (grouping, destination){ //'Category', 'div#catBox'
 
             var bins = createbins(outdata, domain);
             
-            var y = d3.scaleBand()
-                .range([height,0])
-                .domain(domain)
-                .padding(.4);
+            //Clear data
+            svg3.selectAll("line").remove();
+            svg3.selectAll("rect").remove();
+            svg3.selectAll("circle").remove();
+
+            //Update Axes
+            y3.domain(domain);
+            yAxis3
+                .transition()
+                .duration(1000)
+                .call(d3.axisLeft(y3));
+
+            x3.domain([bins[0].x0, bins[0].x1]);
+            xAxis3.call(d3.axisBottom(x3).ticks(Math.round(bins[0].x1/10)));
+
             
-            svg3.append("g")
-                .call(d3.axisLeft(y).tickSize(0))
-                .select(".domain").remove(0)
-
-            var x = d3.scaleLinear()
-                .domain([bins[0].x0, bins[0].x1])
-                .range([0,width])
-
-            svg3.append("g")
-                .attr("transform", "translate(0," + height + ")")
-                .call(d3.axisBottom(x).ticks(Math.round(bins[0].x1/10)))
-
-            svg3.append("text")
-                .attr("text-anchor", "end")
-                .attr("x", width)
-                .attr("y", height + margin2.top + 30)
-                .text(grouping + " Age")
-                .style("stroke", "white");
-
             //draws the range line
-            svg3.selectAll("vertLines")
+            var rnglines = svg3.selectAll("vertLines")
                 .data(bins[1])
-                .enter()
-                .append("line")
-                    .attr("x1", function(d){return(x((d.Range[0])))})
-                    .attr("x2", function(d){return(x((d.Range[1])))})
-                    .attr("y1", function(d){return(y(d.Dom) + y.bandwidth()/2)})
-                    .attr("y2", function(d){return(y(d.Dom) + y.bandwidth()/2)})
+            
+            rnglines
+                   .join("line")
+                   .transition()
+                   .duration(1000)
+                    .attr("x1", d => x3(d.Range[0]))
+                    .attr("x2", d => x3(d.Range[1]))
+                    .attr("y1", d => y3(d.Dom) + y3.bandwidth()/2)
+                    .attr("y2", d => y3(d.Dom) + y3.bandwidth()/2)
                     .attr("stroke", "white")
-                    .style("width",40)
+                    .style("width",40);
 
             //draws the box
-            svg3.selectAll("boxes")
+            var box = svg3.selectAll("boxes")
                 .data(bins[1])
-                .enter()
-                .append("rect")
-                    .attr("x", function(d){return(x(d.Quartiles[0]))})
-                    .attr("width", function(d){ ;  return(x(d.Quartiles[2])-x(d.Quartiles[0]))})
-                    .attr("y", function(d){return y(d.Dom); })
-                    .attr("height", y.bandwidth())
+            box
+                .join("rect")
+                .transition()
+                .duration(1000)
+                    .attr("x", function(d){return(x3(d.Quartiles[0]))})
+                    .attr("width", function(d){ ;  return(x3(d.Quartiles[2])-x3(d.Quartiles[0]))})
+                    .attr("y", function(d){return y3(d.Dom); })
+                    .attr("height", y3.bandwidth())
                     .attr("stroke", "white")
                     .style("fill", "#69b3a2")
-                    .style("opacity", 1.0)
+                    .style("opacity", 1.0);
 
             //draws median
-            svg3.selectAll("medianLines")
+            var medlines = svg3.selectAll("medianLines")
                 .data(bins[1])
-                .enter()
-                .append("line")
-                    .attr("y1", function(d){return(y(d.Dom))})
-                    .attr("y2", function(d){return(y(d.Dom) + y.bandwidth())})
-                    .attr("x1", function(d){return(x(d.Quartiles[1]))})
-                    .attr("x2", function(d){return(x(d.Quartiles[1]))})
+            medlines
+                .join("line")
+                .transition()
+                .duration(1000)
+                    .attr("y1", function(d){return(y3(d.Dom))})
+                    .attr("y2", function(d){return(y3(d.Dom) + y3.bandwidth())})
+                    .attr("x1", function(d){return(x3(d.Quartiles[1]))})
+                    .attr("x2", function(d){return(x3(d.Quartiles[1]))})
                     .attr("stroke", "white")
-                    .style("width" , 80)
+                    .style("width" , 80);
 
             
             //draws outliers
             var outlierdata = mapoutliers(bins[1]);
-            svg3.selectAll("indPoints")
+            var out = svg3.selectAll("indPoints")
                 .data(outlierdata)
-                .enter()
-                .append("circle")
-                    .attr("cx", function(d){return (x(d.Age))})
-                    .attr("cy", function(d){return (y(d.Dom) + y.bandwidth()/2)})
+            out.remove()
+            
+            out
+                .join("circle")
+                .transition()
+                .duration(1000)
+                    .attr("cx", function(d){return (x3(d.Age))})
+                    .attr("cy", function(d){return (y3(d.Dom) + y3.bandwidth()/2)})
                     .attr("r", 2)
                     .style("fill", "white")
-                    .attr("stroke", "white")
+                    .attr("stroke", "white");
 
             function mapoutliers (input) {
                 var arr= [];
