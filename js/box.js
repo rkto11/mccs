@@ -115,7 +115,7 @@ function boxplot (grouping){ //'Category'
                 .duration(1000)
                     .attr("cx", function(d){return (x3(d.Age))})
                     .attr("cy", function(d){return (y3(d.Dom) + y3.bandwidth()/2)})
-                    .attr("r", 2)
+                    .attr("r", 1.5)
                     .style("fill", "white")
                     .attr("stroke", "white");
 
