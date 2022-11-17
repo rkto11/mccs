@@ -5,6 +5,7 @@ function createCostTables(input){
     var Category = ['Category', 'naf_cat'];
     var Region = ['Region', 'region'];
     var RegionC = ['Region', 'region'];
+    var Installation = ['Installation', 'installation'];
     var Program = ['Program', 'op_activity'];
     var CCNDesc = ['Use Category', 'use_desc'];
     var Asset = groupSumCount(data, ['op_activity','fac_use','facility_desc', 'asset_name']);
@@ -12,6 +13,7 @@ function createCostTables(input){
     Category.push([...new Set(data.map(item => item.naf_cat))]);
     Region.push([...new Set(data.map(item => item.region))]);
     RegionC.push([...new Set(data.map(item => item.region))]);
+    Installation.push([...new Set(data.map(item => item.installation))]);
     Program.push([...new Set(data.map(item => item.op_activity))]);
     CCNDesc.push([...new Set(data.map(item => item.use_desc))]);
     
@@ -19,12 +21,14 @@ function createCostTables(input){
     var CategoryData = createFSRM(data, Category);
     var RegionData =  createFSRM(data, Region);
     var RegionCData =  createFSRM(CatC, RegionC);
+    var InstallationData = createFSRM(data, Installation);
     var ProgramData = createFSRM(data, Program);
     var CCNDescData = createFSRM(data, CCNDesc);
 
     var CategoryTable = createTable(CategoryData);
     var RegionTable = createTable(RegionData);
     var RegionCTable = createTable(RegionCData);
+    var InstallationTable = createTable(InstallationData);
     var ProgramTable = createTable(ProgramData);
     var CCNDescTable = createTable(CCNDescData);
 
@@ -166,6 +170,54 @@ function createCostTables(input){
         });
     });
 
+    $('#tabInstallation').html(InstallationTable);
+    $(document).ready(function () {
+        $('#tabInstallation').dataTable({
+            data: InstallationData,
+            paging: true,
+            "bLengthChange": false,
+            "bFilter": false,
+            "bInfo": false,
+            order: [[3, 'desc']],
+            columns: [
+                {data: 'Installation'},
+                {data: 'Sustainment',render: $.fn.dataTable.render.number(',', '.', 0, '$' )},
+                {data: 'RM',render: $.fn.dataTable.render.number(',', '.', 0, '$' )},
+                {data: 'Total',render: $.fn.dataTable.render.number(',', '.', 0, '$' )},
+                {data: 'SqFt',render: $.fn.dataTable.render.number(',', '.', 0)},
+                {data: 'Price per SqFt',render: $.fn.dataTable.render.number(',', '.', 2, '$' )}
+            ],
+            
+        
+            "footerCallback": function ( row, data, start, end, display ) {
+                var api = this.api();
+
+                var intVal = function ( i ) {
+                    return typeof i === 'string' ?
+                        i.replace(/[\$,]/g, '')*1 :
+                        typeof i === 'number' ?
+                            i : 0;
+                };
+                // var sus = api.column(1).data().reduce(function(a,b){return intVal(a) +intVal(b);});
+                // var RM = api.column(2).data().reduce(function(a,b){return intVal(a) +intVal(b);});
+                // var total = api.column(3).data().reduce( function (a, b) {return intVal(a) + intVal(b);});
+                // var tsf = api.column(4).data().reduce( function (a, b) {return intVal(a) + intVal(b);});
+                
+                var sus = api.column(1, {page: 'current'}).data().reduce(function(a,b){return intVal(a) +intVal(b);});
+                var RM = api.column(2, {page: 'current'}).data().reduce(function(a,b){return intVal(a) +intVal(b);});
+                var total = api.column(3, {page: 'current'}).data().reduce( function (a, b) {return intVal(a) + intVal(b);});
+                var tsf = api.column(4, {page: 'current'}).data().reduce( function (a, b) {return intVal(a) + intVal(b);});
+                
+                $(api.column(0).footer()).html('Total FSRM (Current Page)');
+                $(api.column(1).footer()).html(numFormat(sus));
+                $(api.column(2).footer()).html(numFormat(RM));
+                $(api.column(3).footer()).html(numFormat(total));
+                $(api.column(4).footer()).html(numFormat2(tsf));
+                $(api.column(5).footer()).html(numFormat3(total/tsf));
+            }
+        });
+    });
+
     $('#tabProgram').html(ProgramTable);
     $(document).ready(function () {
         $('#tabProgram').dataTable({
@@ -259,7 +311,6 @@ function createCostTables(input){
 }
 function createQratingTables(input){
     var data = input;
-
     var totalQ = totalQcalc(data);
     function totalQcalc(dataset){    
     var counter1=0, counter2=0, counter3=0, counter4=0;

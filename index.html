@@ -12,21 +12,20 @@
 	<link rel="stylesheet" type="text/css" href="./css/jquery-ui.structure.min.css">
 	<link rel="stylesheet" type="text/css" href="./css/datatables.min.css"/>
 	<link href="./css/style.css" type="text/css" rel="stylesheet">
-	<script src="./js/jquery.tocify.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="./css/jquery.tocify.css">
 	<script src="./js/d3.min.js"></script>
 	<script src="./js/jquery.csv.js"></script>
 	<script src="./js/datatables.min.js"></script>
 	<script src="./js/createtables.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.3/xlsx.full.min.js"></script>
+	<script src="./js/printThis.js"></script>
 	
 	<title>Plans, Policy, and Analysis</title>
 </head>
 
-
 <body>
 	<nav id="mynav" class="navbar navbar-expand-md sticky-top">
   		<div class="container-fluid">
-    			<a class="navbar-brand toc-ignore" style="color:#ffffff">PPBEA</a>
+    			<a class="navbar-brand" style="color:#ffffff">PPBEA</a>
     			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
       				<span class="navbar-toggler-icon"></span>
     			</button>
@@ -41,12 +40,12 @@
         				<li class="nav-item">
 						<button class="nav-link" data-bs-toggle="pill" data-bs-target="#facrecap" type="button" role="tab" id="facrecapbtn" onclick="topFunction()">Facilities ReCap Plan</button>
         				</li>
-					<li class="nav-item">
+					<!-- <li class="nav-item">
 						<button class="nav-link" data-bs-toggle="pill" data-bs-target="#lodging" type="button" role="tab" id="logbtn" onclick="topFunction()">Official Lodging</button>
         				</li>
 					<li class="nav-item">
 						<button class="nav-link" data-bs-toggle="pill" data-bs-target="#catc" type="button" role="tab" id="catcbtn">Cat C</button onclick="topFunction()">
-        				</li>
+        				</li> -->
 					<li class="nav-item">
 						<button class="nav-link" data-bs-toggle="pill" data-bs-target="#dataentry" type="button" role="tab" id="databtn" onclick="topFunction()">Data Entry</button>
 						</li>
@@ -104,20 +103,24 @@
 				<p>Reference: MCCS Integrated Strategic Guidance <a href="https://mccsorg-my.sharepoint.com/:b:/g/personal/jason_barnes_usmc-mccs_org/ESIbRg1PR9tMu8YLVtzJKkABncamySFqIZnTYB7Zv3bxQQ?e=ptuZJb">link</a></p>
 		</div>
 
-
 		<div id="facilities" class="tab-pane container-fluid fade">
+			<!-- <button id="genPDF">generate PDF</button> -->
+			
 			<aside>
-				<div id="facnav"></div>
+				<nav id="facToc">
+				</nav>
 			</aside>
+
 			<div id="FacContents">
+				
 				<div class="container" id="FacDesc">
 						<h1>MCCS Facilities Exploratory Analysis</h1>
 						<p>Note: The current report is based on utilization information unless otherwise noted.</p>
 						<p>Facility Sustainment, Restortation, and Modernization (FSRM) calculations are resource agnostic.</p>
 						<p>Data dictionary and assumptions are at the end of this report.</p>
 						<p>Raw  data pulled from GoRPM on <i>make this autofilled date from file</i>.</p>
-						<p>Download raw data here: "link here"</p>
-						<p>Download cleaned data here: "link here"</p>
+						<p>Download raw data here: <a target="_blank" rel="noopener noreferrer"  href="https://github.com/rkto11/mccs/raw/main/data/MCCS%20Facility%20Inventory%20Report%20-%202022-10-20_14-16-37.XLSX" download>link</a></p>
+						<p>Download cleaned data here: <a target="_blank" rel="noopener noreferrer" href="https://raw.githubusercontent.com/rkto11/mccs/main/data/df_final.csv" download="df_final.xlsx">link</a></p>
 				</div>
 				<hr><br>
 				<div class="container" id="FacCharts">
@@ -125,7 +128,64 @@
 					<h3>Cost by Category</h3>
 					<p> Facility Sustainment, Resportation, and Modernization (FSRM) </p>
 					<br>
-					<!--see createtables.js for table generation-->
+					
+						<div class="nav nav-pills me-3 center" id="pills-tab" role="tablist">
+						  <button class="nav-link active" id="pills-cost-category" data-bs-toggle="pill" data-bs-target="#cost-category" type="button" role="tab" aria-controls="cost-category" aria-selected="true" onclick="updatebar('catdata')">Category</button>
+						  <button class="nav-link" id="pills-cost-region" data-bs-toggle="pill" data-bs-target="#cost-region" type="button" role="tab" aria-controls="cost-region" aria-selected="false" button onclick="updatebar('regdata')">Region</button>
+						  <button class="nav-link" id="pills-cost-catc" data-bs-toggle="pill" data-bs-target="#cost-catc" type="button" role="tab" aria-controls="cost-catc" aria-selected="false" onclick="updatebar('regdata')">Cat C</button>
+						  <button class="nav-link" id="pills-cost-installation" data-bs-toggle="pill" data-bs-target="#cost-installation" type="button" role="tab" aria-controls="cost-installation" aria-selected="false" onclick="updatebar('instdata')">Installation</button>
+						  <button class="nav-link" id="pills-cost-program" data-bs-toggle="pill" data-bs-target="#cost-program" type="button" role="tab" aria-controls="cost-program" aria-selected="false" onclick="updatebar('prodata')">Program</button>
+						  <button class="nav-link" id="pills-cost-ccn" data-bs-toggle="pill" data-bs-target="#cost-ccn" type="button" role="tab" aria-controls="cost-ccn" aria-selected="false" onclick="updatebar('prodata')">Use Category</button>
+						</div>
+						<div class="tab-content" id="v-pills-tabContent">
+						  <div class="tab-pane fade show active" id="cost-category" role="tabpanel" aria-labelledby="pills-cost-category">
+							<h4>FY24 MCCS FSRM Cost by Category</h4>
+							<table class="table display dt-responsive" id="tabCat" style="width:100%"></table>
+							<p><Strong>What is the percent of total square foot utilization by Category?</Strong></p>
+							<p>Category C accounts for 46% of MCCS total utilization.</p>
+						  </div>
+
+						  <div class="tab-pane fade" id="cost-region" role="tabpanel" aria-labelledby="pills-cost-region">
+							<h4>FY24 MCCS FSRM Cost by Region</h4>
+							<table class="table display dt-responsive" id="tabRegion" style="width:100%"></table>
+							<p><strong>What is the percent of total sqft utilization by Region?</strong></p>
+							<p>MCIEAST, MCIPAC, MCIWEST account for over 82% of the total MCCS square feet utilization.</p>
+							<p><strong>What is the FSRM costs per square foot utilization by Region?</strong></p>
+							<p>Locations without a Region have substantially greater costs for FSRM per square foot utilization.</p>
+						  </div>
+
+						  <div class="tab-pane fade" id="cost-catc" role="tabpanel" aria-labelledby="pills-cost-catc">
+							<h4>FY24 MCCS FSRM Cost by Region Cat C</h4>
+							<table class="table display dt-responsive" id="tabRegionC" style="width:100%"></table>
+						  </div>
+
+						  <div class="tab-pane fade" id="cost-installation" role="tabpanel" aria-labelledby="pills-cost-installation">
+							<h4>FY24 MCCS FSRM Cost by Installation</h4>
+							<table class="table display dt-responsive" id="tabInstallation" style="width:100%"></table>
+							<p><strong>What is the percent of total sqft utilization by Installation?</strong></p>
+							<p>Not surprisingly, Camp Lejeune and Camp Pendleton account for approximately 32% of the total square footage of MCCS. The top 10 out of 26 installations account for 83% of MCCS total infrastructure.</p>
+						  </div>
+
+						  <div class="tab-pane fade" id="cost-program" role="tabpanel" aria-labelledby="pills-cost-program">
+							<h4>FY24 MCCS FSRM Cost by Program</h4>
+							<table class="table display dt-responsive" id="tabProgram" style="width:100%"></table>
+							<h5>What is percent of total square foot utilization by Program?</h5>
+							<p><strong>Exchange Operations, Semper Fit Programs, Marine &amp; Family Programs</strong> account for roughly <strong>68%</strong> of MCCS total square foot utilization.</p>
+							<p>While Food &amp; Beverage (Direct) only accounts for just over <strong>4%</strong> of the total MCCS sqft utilization it ranks number <strong>7</strong> in total FSRM costs at a total cost of <strong>$10,467,504</strong> or <strong>4%</strong> of all FSRM costs.</p>
+							<h5>What is the FSRM cost per square foot utilization by Program?</h5>
+							<p>The cost per sqft by program is <strong>$16.58</strong>.</p>
+						  </div>
+
+						  <div class="tab-pane fade" id="cost-ccn" role="tabpanel" aria-labelledby="pills-cost-ccn">
+							<h4>FY24 MCCS FSRM Cost by Use Category</h4>
+							<table class="table display dt-responsive" id="tabCCN" style="width:100%"></table>
+							<h4>Use Category Top 10</h4>
+							<p><em>Facility Type Code</em> — The Facility Type Code determines the category code of the facility. The code ranges from category I to category IV and is tied to the DoD FAC Code. Each Category Code has an accompanying category use description.</p>
+							<p>There are a total of <strong>72</strong> distinct use categories within data set. The top 10 use category descriptions account for over <strong>62%</strong> of the total costs in the MCCS portfolio.</p>
+						  </div>
+						
+					  </div>
+					<!--see createtables.js for table generation
 					<h4>FY24 MCCS FSRM Cost by Category</h4>
 						<table class="table display dt-responsive" id="tabCat" style="width:100%"></table>
 
@@ -140,17 +200,25 @@
 
 					<h4>FY24 MCCS FSRM Cost by Use Category</h4>
 						<table class="table display dt-responsive" id="tabCCN" style="width:100%"></table>
+						-->
 				</div>
-				<hr><br>
+				
 				<div class="container" id="FacGraphs">
-					<div id="g1">
-						<div id="sqftovertime"></div>
-					</div>
 					<div id="sqftbar">
-						<button onclick="updatebar('catdata')">Category</button>
+						<!-- <button onclick="updatebar('catdata')">Category</button>
 						<button onclick="updatebar('regdata')">Region</button>
-						<button onclick="updatebar('instdata')">Installation</button>
+						<button onclick="updatebar('instdata')">Installation</button> -->
 						<div id="groupedsqft"></div>
+					</div>
+					<hr><br>
+					<div id="g1">
+						<h3>Exploring Utilization Over Time</h3>
+						<p>Total utilization of MCCS according to iNFADS is 14,150,438 square feet (Total Measure = adq + iadq + sub).
+							<br>
+							Note: Utilization such as athletic fields, outdoor playing courts (basketball, volleyball, etc.), playgrounds and Marina/Boat Ramps are typically not included in total measure of square foot utilization)
+							<br>
+							Note: The trends are based on MCCS existing utilization by age.</p>
+						<div id="sqftovertime"></div>
 					</div>
 					<script src="./js/creategraphs.js"></script>
 				</div>
@@ -161,47 +229,108 @@
 						<p>Number of <b>facilities</b> by Q-Rating</p>
 						<p id="pq1"></p>
 					</div>
-					<h4>Category</h4>
+
+					<div class="nav nav-pills me-3 center" id="pills-tab" role="tablist">
+						<button class="nav-link active" id="pills-q-category" data-bs-toggle="pill" data-bs-target="#q-category" type="button" role="tab" aria-controls="q-category" aria-selected="true">Category</button>
+						<button class="nav-link" id="pills-q-region" data-bs-toggle="pill" data-bs-target="#q-region" type="button" role="tab" aria-controls="q-region" aria-selected="false">Region</button>
+						<button class="nav-link" id="pills-q-installation" data-bs-toggle="pill" data-bs-target="#q-installation" type="button" role="tab" aria-controls="q-installation" aria-selected="false">Installation</button>
+						<button class="nav-link" id="pills-q-program" data-bs-toggle="pill" data-bs-target="#q-program" type="button" role="tab" aria-controls="q-program" aria-selected="false">Program</button>
+					  </div>
+					  <div class="tab-content" id="q-pills-tabContent">
+						<div class="tab-pane fade show active" id="q-category" role="tabpanel" aria-labelledby="pills-q-category">
+							<h4>Category</h4>
+							<table class="table display dt-responsive" id="tabCatQ" style="width:100%"></table>
+						</div>
+
+						<div class="tab-pane fade" id="q-region" role="tabpanel" aria-labelledby="pills-q-region">
+							<h4>Region</h4>
+							<table class="table display dt-responsive" id="tabRegQ" style="width:100%"></table>
+						</div>
+
+						<div class="tab-pane fade" id="q-program" role="tabpanel" aria-labelledby="pills-q-program">
+							<h4>Program</h4>
+							<table class="table display dt-responsive" id="tabProQ" style="width:100%"></table>
+						</div>
+
+						<div class="tab-pane fade" id="q-installation" role="tabpanel" aria-labelledby="pills-q-installation">
+							<h4>Installation</h4>
+							<table class="table display dt-responsive" id="tabInsQ" style="width:100%"></table>
+						</div>
+					<!-- <h4>Category</h4>
 					<table class="table display dt-responsive" id="tabCatQ" style="width:100%"></table>
 					<h4>Region</h4>
 					<table class="table display dt-responsive" id="tabRegQ" style="width:100%"></table>
 					<h4>Program</h4>
 					<table class="table display dt-responsive" id="tabProQ" style="width:100%"></table>
 					<h4>Installation</h4>
-					<table class="table display dt-responsive" id="tabInsQ" style="width:100%"></table>
+					<table class="table display dt-responsive" id="tabInsQ" style="width:100%"></table> -->
+				</div>
 				</div>
 				<hr><br>
 				<div class="container" id="FacStats">
 					<h2>Exploring the age of facilities</h2>
 					<h4>Q-Rating</h4>
-					<table class="table display dt-responsive" id="tabQStats" style="width:100%"></table>
-					<div id="qBox"></div>
-					<h4>Category</h4>
-					<table class="table display dt-responsive" id="tabCatStats" style="width:100%"></table>
-					<div id="catBox"></div>
-					<h4>Region</h4>
-					<table class="table display dt-responsive" id="tabRegStats" style="width:100%"></table>
-					<div id="regBox"></div>
-					<h4>Installation</h4>
-					<table class="table display dt-responsive" id="tabInsStats" style="width:100%"></table>
-					<div id="insBox"></div>
-					<h4>Program</h4>
-					<table class="table display dt-responsive" id="tabProStats" style="width:100%"></table>
-					<div id="proBox"></div>
-					<h4>Use Category</h4>
-					<table class="table display dt-responsive" id="tabCCNStats" style="width:100%"></table>
+
+					<div class="nav nav-pills me-3 center" id="pills-tab" role="tablist">
+						<button class="nav-link active" id="pills-age-q" data-bs-toggle="pill" data-bs-target="#age-q" type="button" role="tab" aria-controls="age-q" aria-selected="true" onclick="boxplot('QRating')">Q-Rating</button>
+						<button class="nav-link" id="pills-age-category" data-bs-toggle="pill" data-bs-target="#age-category" type="button" role="tab" aria-controls="age-category" aria-selected="false" onclick="boxplot('Category')">Category</button>
+						<button class="nav-link" id="pills-age-region" data-bs-toggle="pill" data-bs-target="#age-region" type="button" role="tab" aria-controls="age-region" aria-selected="false" onclick="boxplot('Region')">Region</button>
+						<button class="nav-link" id="pills-age-installation" data-bs-toggle="pill" data-bs-target="#age-installation" type="button" role="tab" aria-controls="age-installation" aria-selected="false" onclick="boxplot('Installation')">Installation</button>
+						<button class="nav-link" id="pills-age-program" data-bs-toggle="pill" data-bs-target="#age-program" type="button" role="tab" aria-controls="age-program" aria-selected="false">Program</button>
+						<button class="nav-link" id="pills-age-ccn" data-bs-toggle="pill" data-bs-target="#age-ccn" type="button" role="tab" aria-controls="age-ccn" aria-selected="false">Use Category</button>
+					</div>
+
+					<div class="tab-content" id="age-pills-tabContent">
+						<div class="tab-pane fade show active" id="age-q" role="tabpanel" aria-labelledby="pills-age-q">
+							<h4>Q-Rating</h4>
+							<table class="table display dt-responsive" id="tabQStats" style="width:100%"></table>
+							<div id="qBox"></div>
+						</div>
+
+						<div class="tab-pane fade" id="age-category" role="tabpanel" aria-labelledby="pills-age-category">
+							<h4>Category</h4>
+							<table class="table display dt-responsive" id="tabCatStats" style="width:100%"></table>
+							<div id="catBox"></div>
+						</div>
+
+						<div class="tab-pane fade" id="age-region" role="tabpanel" aria-labelledby="pills-age-region">
+							<h4>Region</h4>
+							<table class="table display dt-responsive" id="tabRegStats" style="width:100%"></table>
+							<div id="regBox"></div>
+
+						</div>
+
+						<div class="tab-pane fade" id="age-program" role="tabpanel" aria-labelledby="pills-age-program">
+							<h4>Program</h4>
+							<table class="table display dt-responsive" id="tabProStats" style="width:100%"></table>
+							<div id="proBox"></div>
+						</div>
+
+						<div class="tab-pane fade" id="age-installation" role="tabpanel" aria-labelledby="pills-age-installation">
+							<h4>Installation</h4>
+							<table class="table display dt-responsive" id="tabInsStats" style="width:100%"></table>
+							<div id="insBox"></div>
+						</div>
+
+						<div class="tab-pane fade" id="age-ccn" role="tabpanel" aria-labelledby="pills-age-ccn">
+							<h4>Use Category</h4>
+							<table class="table display dt-responsive" id="tabCCNStats" style="width:100%"></table>
+						</div>
+					</div>
+					
 					<div id="allboxplots">
-						<button onclick="boxplot('QRating')">Q-Rating</button>
+						<!-- <button onclick="boxplot('QRating')">Q-Rating</button>
 						<button onclick="boxplot('Category')">Category</button>
 						<button onclick="boxplot('Region')">Region</button>
-						<button onclick="boxplot('Installation')">Installation</button>
+						<button onclick="boxplot('Installation')">Installation</button> -->
 						<div id="allBox"></div>
 						<script src="./js/box.js"></script>
+
 					</div>
 
 				</div>
 				
-				<hr><br>
+				<hr>
 				<div id="data-dictionary" class="section level1" style="text-align: left">
 				<h1 class="text-center">Data Dictionary</h1>
 				<p><strong>Region:</strong> Installations grouped within their perspective geographical region. There is a total of 5 regions (MCIWEST, MCIEAST, MCIPAC, MCINCR, SLTI) The following locations are not associated with a region in the data set:</p>
@@ -264,23 +393,24 @@
 				</div>
 			</div>
 		</div>
+		
 
 		<div id="facrecap" class="tab-pane container fade">
 			<h1>Recapitalization Plan</h1>
 			<div>
-				<table class="gt_table">
+				<table class="gt_table" style="margin: 0px auto">
 					<thead class="gt_header">
 					  <tr>
 						<th colspan="3" class="gt_heading gt_title gt_font_normal" style>R&amp;M Schedule for <em>FY24</em> by Installation<sup class="gt_footnote_marks">1</sup></th>
 					  </tr>
 					  <tr>
-						<th colspan="3" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>*<em>GoRPM</em> data retrieved <strong>Dec 28, 2021</strong></th>
+						<th colspan="3" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>*<em>GoRPM</em> data retrieved <strong>Oct 20, 2022</strong></th>
 					  </tr>
 					</thead>
 					<thead class="gt_col_headings">
 					  <tr>
 						<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"></th>
-						<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">installation</th>
+						<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Installation</th>
 						<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Count</th>
 					  </tr>
 					</thead>
@@ -358,100 +488,166 @@
 
 			</div>
 		</div>
-		<div id="lodging" class="tab-pane container fade">
 
+
+		<div id="lodging" class="tab-pane container fade">
 		</div>
+
 		<div id="catc" class="tab-pane container fade">
-		
 		</div>
-		<div id="dataentry" class="tab-pane container fade">
+
+
+		<div id="dataentry" class="tab-pane container fade ">
 			<form id="myForm">
+				<h2>Select CSV 1</h2>
 				<input type="file" id="csvFile" accept=".csv" />
+				<h2>Select CSV 2</h2>
+				<input type="file" id="csvFile2" accept=".csv" />
 				<br />
-				<input type="submit" value="Submit" />
-			  </form>
-			  <script>
+				<input type="submit" id="submit2" value="Submit" />
+			</form>
+			<script>
 				const myForm = document.getElementById("myForm");
 				const csvFile = document.getElementById("csvFile");
 			
-				function csvToArray(str, delimiter = ",") {
-			
-				  // slice from start of text to the first \n index
-				  // use split to create an array from string by delimiter
-				  const headers = str.slice(0, str.indexOf("\n")).split(delimiter);
-			
-				  // slice from \n index + 1 to the end of the text
-				  // use split to create an array of each csv value row
-				  const rows = str.slice(str.indexOf("\n") + 1).split("\n");
-			
-				  // Map the rows
-				  // split values from each row into an array
-				  // use headers.reduce to create an object
-				  // object properties derived from headers:values
-				  // the object passed as an element of the array
-				  const arr = rows.map(function (row) {
-					const values = row.split(delimiter);
-					const el = headers.reduce(function (object, header, index) {
-					  object[header] = values[index];
-					  return object;
-					}, {});
-					return el;
-				  });
-			
-				  // return the array
-				  return arr;
-				}
-			
-				myForm.addEventListener("submit", function (e) {
-				  e.preventDefault();
-				  const input = csvFile.files[0];
-				  const reader = new FileReader();
-			
-				  reader.onload = function (e) {
-					const text = e.target.result;
-					const data = csvToArray(text);
-					document.write(JSON.stringify(data));
-				  };
-				  
-				  reader.readAsText(input);
-				});
 
-				/*$(function() {
-					var toc = $("#facnav").tocify().data("FacContents");
-					toc.setOption({showEffect: "fadeIn", selectors: "h2,h3,h4"});
-				});
+				myForm.addEventListener("submit" , function (e) {
+					e.preventDefault();
+					const input = csvFile.files[0];
+					
+					const reader = new FileReader();
+					reader.onload = function (e) {
+						const text = e.target.result;
+						const data = CSVToArray(text);
+						//var jsonObject = JSON.stringify(data);
+						
+						//create a data type checker here to determine process function
 
-				($(document).ready(function ()  {
+						//async function to load/process second sheet
 
-				// temporarily add toc-ignore selector to headers for the consistency with Pandoc
-					$('.unlisted.unnumbered').addClass('toc-ignore')
-	
-					// move toc-ignore selectors from section div to header
-					$('div.section.toc-ignore')
-						.removeClass('toc-ignore')
-						.children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-					// establish options
-					var options = {
-					selectors: "h1,h2",
-					theme: "bootstrap3",
-					context: '.toc-content',
-					hashGenerator: function (text) {
-						return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
-					},
-					ignoreSelector: ".toc-ignore",
-					scrollTo: 0
+						var csv = ConvertToCSV(data);
+						var csvData = new  Blob([csv], {type: 'text/csv'});
+						var csvURL = URL.createObjectURL(csvData);
+						window.open(csvURL);
+						//window.open(encodeURI(ConvertToCSV(data)));
 					};
-					options.showAndHide = true;
-					options.smoothScroll = true;
+					reader.readAsText(input);
+					
 
-					// tocify
-					var toc = $("#TOC").tocify(options).data("toc-tocify");
+				});
+
+				function CSVToArray(strData, strDelimiter){
+					// Check to see if the delimiter is defined. If not,
+					// then default to comma.
+					strDelimiter = (strDelimiter || ",");
+
+					// Create a regular expression to parse the CSV values.
+					var objPattern = new RegExp(
+							(
+									// Delimiters.
+									"(\\" + strDelimiter + "|\\r?\\n|\\r|^)" +
+
+									// Quoted fields.
+									"(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|" +
+
+									// Standard fields.
+									"([^\"\\" + strDelimiter + "\\r\\n]*))"
+							),
+							"gi"
+							);
+
+
+					// Create an array to hold our data. Give the array
+					// a default empty first row.
+					var arrData = [[]];
+
+					// Create an array to hold our individual pattern
+					// matching groups.
+					var arrMatches = null;
+
+					// Keep looping over the regular expression matches
+					// until we can no longer find a match.
+					while (arrMatches = objPattern.exec(strData)){
+							// Get the delimiter that was found.
+							var strMatchedDelimiter = arrMatches[1];
+							// Check to see if the given delimiter has a length
+							// (is not the start of string) and if it matches
+							// field delimiter. If id does not, then we know
+							// that this delimiter is a row delimiter.
+							if (
+									strMatchedDelimiter.length &&
+									(strMatchedDelimiter != strDelimiter)
+									){
+									// Since we have reached a new row of data,
+									// add an empty row to our data array.
+									arrData.push([]);
+							}
+							// Now that we have our delimiter out of the way,
+							// let's check to see which kind of value we
+							// captured (quoted or unquoted).
+							if (arrMatches[2]){
+									// We found a quoted value. When we capture
+									// this value, unescape any double quotes.
+									var strMatchedValue = arrMatches[2].replace(
+											new RegExp( "\"\"", "g" ),
+											"\""
+											);
+							} else {
+									// We found a non-quoted value.
+									var strMatchedValue = arrMatches[3];
+							}
+							// Now that we have our value string, let's add
+							// it to the data array.
+							arrData[arrData.length-1].push(strMatchedValue);
+					}
+					
+					var keys = arrData[0];
+					var result = arrData.map(obj => {
+						var replacedObj = {};
+						var oriKeys = Object.keys(obj);
+						for (var i = 0; i<keys.length; i++) {
+							replacedObj[keys[i]] = obj[oriKeys[i]]
+						};
+						return replacedObj;
 					});
+					result.shift();
 
-					*/
+					return(result);
+				}
 				
-			  </script>
+				 function ConvertToCSV(arr) {
+					//var arr = objArray //!= 'object' ? JSON.parse(objArray) : objArray;
+					//var str = 'data:text/csv;charset=utf-8,';
+					var str = ''
+					var k =  Object.keys(arr[0]);
+					for(q = 0; q<k.length; q++){
+						str += k[q];
+						if (q<k.length-1){
+							str+=',';
+						}
+					}
+					str += '\r\n';
+					for(var i = 0; i < arr.length-1; i++) {
+						var line = '';
+						for(var j=0; j<k.length; j++) {
+							var key=k[j];
+							const tex = String(arr[i][key]);
+							const result = tex.indexOf(',');
+							if (result>-1){
+								line += '"' + arr[i][key] + '"';
+							}
+							else {
+								line += arr[i][key];
+							}
+							if (j<k.length - 1){
+								line += ',';
+							}
+						}
+						str += line + '\r\n';
+					}
+					return str;
+				}
+			</script>
 		</div>
 	</div>
 	<script>
@@ -459,7 +655,6 @@
 		$(document).ready(function () {
 			$.get('https://raw.githubusercontent.com/rkto11/mccs/main/data/df_final.csv', function (theData) {
 				var data = $.csv.toObjects(theData);
-				console.log(data);
 				createCostTables(data);
 				createQratingTables(data);
 				createAgeTables(data);
@@ -467,11 +662,35 @@
 				boxplot('QRating');
 			});
 		});
+
+		$(document).ready(function () {
+			$.get('https://raw.githubusercontent.com/rkto11/mccs/main/data/Recap%20Plan.csv', function (recap) {
+				var data = $.csv.toObjects(recap);
+			});
+		});
 		
 		function topFunction() {
  			document.body.scrollTop = 0;
   			document.documentElement.scrollTop = 0;
 		}
+
+		function popup() {
+			document.getElementById("popover-backplate").style.display = "block";
+		}
+
+		function popoff(){
+			document.getElementById("popover-backplate").style.display = "none";
+		}
+
+		$(document).ready(function () {
+			$('#genPDF').click(function(){
+				$('#FacDesc, #cost-category, #cost-region, #groupedsqft, #groupedsqft').printThis({
+					importCSS: false,
+					importStyle: false,
+					loadCSS: "C:/Users/olsonrk/Documents/html/css/print.css",
+				});
+			})
+		})
 	</script>
 </body>
 </html>

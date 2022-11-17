@@ -33,6 +33,9 @@ p{
 
 #contents{
 	color:#f9f9f9;
+	max-width: 1000px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 #home{ width: 100%;
@@ -47,22 +50,23 @@ p{
 #FacContents{
 	text-align: center;
 	box-sizing: content-box;
-	max-width: 75%;
-	margin-left: 16%;
+	max-width: 1000px;
+	margin-left: auto;
 	margin-right: auto;
 }
 
 
 table, th, td {
 	color:#f9f9f9;
-	margin-left: auto;
-	margin-right: auto;
 	text-align: left;
+	font-size: 10pt;
+	max-width: 50%;
 }
 
 .pagination>li>a {
 	background-color: #33333d;
 	color: #82838b;
+	font-size: 10pt;
 }
 .pagination>li>a.active {
 	background-color:#33333d;
@@ -95,3 +99,24 @@ table, th, td {
 	stroke-width: 5px;
   }
   
+  #popover-backplate {
+	position: fixed;
+	display: none;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0,0,0,0.5);
+	z-index: 2;
+	cursor: pointer;
+  }
+
+  #facrecap{
+	text-align: center;
+	box-sizing: content-box;
+	max-width: 1000px;
+	margin-left: auto;
+	margin-right: auto;
+}

@@ -137,13 +137,14 @@ function updatebar(inputstring) {
     // fetch/process data
     d3.csv("https://raw.githubusercontent.com/rkto11/mccs/main/data/df_final.csv",
     function process(d){
-        return {inst: d.installation, reg: d.region, category: d.naf_cat, value: d.total_measure}
+        return {inst: d.installation, reg: d.region, category: d.naf_cat, program:d.op_activity, value: d.total_measure}
     }
     ).then(
         function(data){
             const instdata = groupsumdata(data, "inst");
             const regdata = groupsumdata(data, "reg");
             const catdata = groupsumdata(data, "category");
+            const prodata = groupsumdata(data,  "program");
 
             if (inputstring === "instdata"){
                 var outdata  = instdata.slice().sort((a,b) => d3.descending(a.value,b.value));
@@ -153,6 +154,9 @@ function updatebar(inputstring) {
             }
             if (inputstring === "catdata"){
                 var outdata = catdata.slice().sort((a,b) => d3.descending(a.value,b.value));
+            }
+            if (inputstring === "prodata"){
+                var outdata = prodata.slice().sort((a,b) => d3.descending(a.value,b.value));
             }
 
     // Update the X axis
