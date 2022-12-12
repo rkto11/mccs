@@ -18,6 +18,7 @@
 	<script src="./js/createtables.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.3/xlsx.full.min.js"></script>
 	<script src="./js/printThis.js"></script>
+	<script src="./js/reacap.js"></script>
 	
 	<title>Plans, Policy, and Analysis</title>
 </head>
@@ -398,95 +399,9 @@
 		<div id="facrecap" class="tab-pane container fade">
 			<h1>Recapitalization Plan</h1>
 			<div>
-				<table class="gt_table" style="margin: 0px auto">
-					<thead class="gt_header">
-					  <tr>
-						<th colspan="3" class="gt_heading gt_title gt_font_normal" style>R&amp;M Schedule for <em>FY24</em> by Installation<sup class="gt_footnote_marks">1</sup></th>
-					  </tr>
-					  <tr>
-						<th colspan="3" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>*<em>GoRPM</em> data retrieved <strong>Oct 20, 2022</strong></th>
-					  </tr>
-					</thead>
-					<thead class="gt_col_headings">
-					  <tr>
-						<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"></th>
-						<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Installation</th>
-						<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Count</th>
-					  </tr>
-					</thead>
-					<tbody class="gt_table_body">
-					  <tr><td class="gt_row gt_left gt_stub"></td>
-				  <td class="gt_row gt_left">MCB Lejeune</td>
-				  <td class="gt_row gt_left">16</td></tr>
-					  <tr><td class="gt_row gt_left gt_stub"></td>
-				  <td class="gt_row gt_left">MCB Pendleton</td>
-				  <td class="gt_row gt_left">15</td></tr>
-					  <tr><td class="gt_row gt_left gt_stub"></td>
-				  <td class="gt_row gt_left">MCB Hawaii</td>
-				  <td class="gt_row gt_left">9</td></tr>
-					  <tr><td class="gt_row gt_left gt_stub"></td>
-				  <td class="gt_row gt_left">MCAS Yuma</td>
-				  <td class="gt_row gt_left">5</td></tr>
-					  <tr><td class="gt_row gt_left gt_stub"></td>
-				  <td class="gt_row gt_left">MCB Quantico</td>
-				  <td class="gt_row gt_left">5</td></tr>
-					  <tr><td class="gt_row gt_left gt_stub"></td>
-				  <td class="gt_row gt_left">Camp Elmore</td>
-				  <td class="gt_row gt_left">4</td></tr>
-					  <tr><td class="gt_row gt_left gt_stub"></td>
-				  <td class="gt_row gt_left">MCAS Cherry Point</td>
-				  <td class="gt_row gt_left">3</td></tr>
-					  <tr><td class="gt_row gt_left gt_stub"></td>
-				  <td class="gt_row gt_left">MCAS Iwakuni</td>
-				  <td class="gt_row gt_left">3</td></tr>
-					  <tr><td class="gt_row gt_left gt_stub"></td>
-				  <td class="gt_row gt_left">MCAS Miramar</td>
-				  <td class="gt_row gt_left">3</td></tr>
-					  <tr><td class="gt_row gt_left gt_stub"></td>
-				  <td class="gt_row gt_left">MCRD PI</td>
-				  <td class="gt_row gt_left">3</td></tr>
-					  <tr><td class="gt_row gt_left gt_stub"></td>
-				  <td class="gt_row gt_left">MCAS New River</td>
-				  <td class="gt_row gt_left">2</td></tr>
-					  <tr><td class="gt_row gt_left gt_stub"></td>
-				  <td class="gt_row gt_left">MCLB Barstow</td>
-				  <td class="gt_row gt_left">2</td></tr>
-					  <tr><td class="gt_row gt_left gt_stub"></td>
-				  <td class="gt_row gt_left">Garden City</td>
-				  <td class="gt_row gt_left">1</td></tr>
-					  <tr><td class="gt_row gt_left gt_stub"></td>
-				  <td class="gt_row gt_left">MBW (8th &amp; I)</td>
-				  <td class="gt_row gt_left">1</td></tr>
-					  <tr><td class="gt_row gt_left gt_stub"></td>
-				  <td class="gt_row gt_left">MCAGCC 29 Palms</td>
-				  <td class="gt_row gt_left">1</td></tr>
-					  <tr><td class="gt_row gt_left gt_stub"></td>
-				  <td class="gt_row gt_left">MCB Butler</td>
-				  <td class="gt_row gt_left">1</td></tr>
-					  <tr>
-						<td class="gt_row gt_stub gt_right gt_grand_summary_row gt_first_grand_summary_row">Total</td>
-						<td class="gt_row gt_left gt_grand_summary_row gt_first_grand_summary_row">Installation Count</td>
-						<td class="gt_row gt_left gt_grand_summary_row gt_first_grand_summary_row">74</td>
-					  </tr>
-					</tbody>
-					
-					<tfoot>
-					  <tr class="gt_footnotes">
-						<td colspan="3">
-						  <p class="gt_footnote">
-							<sup class="gt_footnote_marks">
-							  <em>1</em>
-							</sup>
-							 
-							Number of facilities by Installation to conduct ICI for scope and estimate
-							<br />
-						  </p>
-						</td>
-					  </tr>
-					</tfoot>
-				  </table>
-
+				<table class="table display dt-responsive" id="tabFY24Recap" style="width:100%"></table>
 			</div>
+
 		</div>
 
 
@@ -660,6 +575,7 @@
 				createAgeTables(data);
 				createSqFtLine();
 				boxplot('QRating');
+				pulldata(data);
 			});
 		});
 
