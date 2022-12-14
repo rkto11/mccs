@@ -149,30 +149,30 @@ function recapTableGen(data){
 }
 
 function sub(d) {
-        let tab = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:100px;">' +
-            '<tr>' +
-               '<th>Asset Name</th>'+
-               '<th>RPUID</th>' +
-               '<th>RM</th>' +
-               '<th>Sustainment</th>' +
-               '<th>FSRM</th>' +
-               '<th>Facility Measure</th>' +
-               '<th>Usage Measure</th>' +
-               '<th>Usage Percentage</th>' +
-               '<th>Build Date</th>' +
-               '<th>FCI</th>' +
-               '<th>FCI Date</th>' +
-            '</tr>';
+        let tab = '<table id="subtable">' +
+            '<thead>' +
+               '<th class="CellWithComment">Asset Name<span class="CellComment">Name of facility in iNFADS</span></th>'+
+               '<th class="CellWithComment">RPUID<span class="CellComment">The real property unique identifier (RPUID) is a non-intelligent code used to permanently and uniquely identify a real property asset. (Primary Key to connect facilities with utilization).</span></th>' +
+               '<th class="CellWithComment">RM<span class="CellComment">Restoration and Modernization Cost, calculated by the facility&#39s Plant Replacement Value (PRV) x Usage Percentage x 1.025^number of years to FY</span></th>' +
+               '<th class="CellWithComment">Sustainment<span class="CellComment">Projected cost of sustainment over the life cycle (50 years) of the facility according to iNFADS</span></th>' +
+               '<th class="CellWithComment">FSRM<span class="CellComment">Facility Sustainment, Restoration, and Modernization Cost of the facility, Sustainment + R&M</span></th>' +
+               '<th class="CellWithComment">Facility SqFt<span class="CellComment">Net sqaure footage of the Facility according to iNFADS</span></th>' +
+               '<th class="CellWithComment">Usage SqFt<span class="CellComment">Square footage used by MCCS of the facility</span></th>' +
+               '<th class="CellWithComment">Usage %<span class="CellComment">Usage SqFt/Facility SqFt</span></th>' +
+               '<th class="CellWithComment">Build Date<span class="CellComment">Date that the facility contruction was completed</span></th>' +
+               '<th class="CellWithComment">FCI<span class="CellComment">Facility Condition Index</span></th>' +
+               '<th class="CellWithComment">FCI Date<span class="CellComment">Most recent FCI entry by the RPAO of the installation into iNFADS</span></th>' +
+            '</thead>';
             for (i=0; i<d.Details.length; i++){
                 var det = d.Details[i];
                 tab +='<tr>' + 
                 '<td>' + det.Asset_Name + '</td>' + 
                 '<td>' + det.RPUID + '</td>' +
-                '<td>' + '$' + Math.round(det.Total_RM*100)/100 + '</td>' + 
-                '<td>' + '$' + Math.round(det.Total_Sustainment *100)/100+ '</td>' + 
-                '<td>' + '$' + Math.round(det.Total_FSRM*100)/100 + '</td>' + 
-                '<td>' + det.Facility_Measure + '</td>' +
-                '<td>' + det.Total_Usage_Measure + '</td>' +
+                '<td>' + '$' + numberWithCommas(Math.round(det.Total_RM*100)/100) + '</td>' + 
+                '<td>' + '$' + numberWithCommas(Math.round(det.Total_Sustainment *100)/100) + '</td>' + 
+                '<td>' + '$' + numberWithCommas(Math.round(det.Total_FSRM*100)/100) + '</td>' + 
+                '<td>' + numberWithCommas(det.Facility_Measure) + '</td>' +
+                '<td>' + numberWithCommas(det.Total_Usage_Measure) + '</td>' +
                 '<td>' + Math.round(det.Total_Usage_Percentage*100)/100 + '%' + '</td>' +
                 '<td>' + det.Build_Date + '</td>' +
                 '<td>' + det.FCI + '</td>' +
@@ -181,4 +181,8 @@ function sub(d) {
             }
         tab += '</table>';
         return tab;
+}
+
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
